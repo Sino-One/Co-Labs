@@ -7,6 +7,30 @@
   pointer-events: none;
 }
 
+absolut {
+  position: absolute;
+}
+
+relative {
+  position: relative;
+}
+
+m-24 {
+  margin: 24px;
+}
+
+m-30 {
+  margin: 30px;
+}
+
+w-90 {
+  width: 90%;
+}
+
+w-7 {
+  width: 7%;
+}
+
 @media (prefers-reduced-motion: no-preference) {
   .App-logo {
     animation: App-logo-spin infinite 20s linear;

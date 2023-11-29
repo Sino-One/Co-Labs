@@ -5,8 +5,11 @@ import Structures from "./Components/Pages/Structures";
 import Projects from "./Components/Pages/Projects";
 import Blog from "./Components/Pages/Blog";
 import { Route, Routes } from "react-router-dom";
-import SignIn from "./Components/Molecules/SignIn";
-import SignUp from "./Components/Molecules/SignOut";
+import SignIn from "./Components/Molecules/SignIn/SignIn";
+import SignUp from "./Components/Molecules/SignUp/SignUp";
+import Bases from "./Components/Molecules/SignUp/Bases";
+import CreationStructure from "./Components/Molecules/SignUp/CreationStructure";
+import UserPrefs from "./Components/Molecules/SignUp/UserPrefs";
 
 function App() {
   return (
@@ -19,6 +22,9 @@ function App() {
         <Route path="/mesProjets" element={<Blog />} />
         <Route path="/signIn" element={<SignIn />} />
         <Route path="/signUp" element={<SignUp />} />
+        <Route path="/bases" element={<Bases />} />
+        <Route path="/creationStructure" element={<CreationStructure />} />
+        <Route path="/userPrefs" element={<UserPrefs />} />
         {/* <Route path="/auth" element={<Auth/>}/>
         <Route path="/modal" element={<Modal/>}/>
         <Route path="/sama" element={<Protected isLoggedIn={AuthService.CallIsAuth()}>
