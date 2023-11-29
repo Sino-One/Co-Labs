@@ -7,6 +7,7 @@ import Button from "@mui/material/Button";
 import Box from "@mui/material/Box";
 import Card from "@mui/material/Card";
 import { useNavigate } from "react-router-dom";
+import { useState } from "react";
 
 const bull = (
   <Box
@@ -19,6 +20,15 @@ const bull = (
 
 export default function SignUp() {
   const navigate = useNavigate();
+
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [passwordConfirm, setPasswordConfirm] = useState("");
+
+  function handleSubmit() {
+    console.log(email, password, passwordConfirm);
+  }
+
   return (
     <>
       <div style={{ margin: "30px" }}>
@@ -35,22 +45,26 @@ export default function SignUp() {
                     label="Identifiant (email)"
                     variant="outlined"
                     style={{ margin: 24, width: "90%" }}
+                    onChange={(e) => setEmail(e.target.value)}
                   />
                   <TextField
                     id="password"
                     label="Mot de passe"
                     variant="outlined"
                     style={{ margin: 24, width: "90%" }}
+                    onChange={(e) => setPassword(e.target.value)}
                   />
                   <TextField
                     id="passwordConfirm"
                     label="Confirmer le mot de passe"
                     variant="outlined"
                     style={{ margin: 24, width: "90%" }}
+                    onChange={(e) => setPasswordConfirm(e.target.value)}
                   />
                   <Button
                     variant="contained"
                     style={{ margin: 24, width: "90%" }}
+                    onClick={handleSubmit}
                   >
                     S'enregistrer
                   </Button>
