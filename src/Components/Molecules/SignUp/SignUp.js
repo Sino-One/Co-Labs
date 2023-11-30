@@ -8,6 +8,8 @@ import Box from "@mui/material/Box";
 import Card from "@mui/material/Card";
 import { useNavigate } from "react-router-dom";
 import { useState } from "react";
+import { ToastContainer, toast } from "react-toastify";
+import axios from "axios";
 
 const bull = (
   <Box
@@ -18,6 +20,14 @@ const bull = (
   </Box>
 );
 
+const config = {
+  headers: {
+    "Access-Control-Allow-Origin": "*",
+    "Access-Control-Allow-Methods": "GET,PUT,POST,DELETE,PATCH,OPTIONS",
+    withCredentials: true,
+  },
+};
+
 export default function SignUp() {
   const navigate = useNavigate();
 
@@ -25,8 +35,41 @@ export default function SignUp() {
   const [password, setPassword] = useState("");
   const [passwordConfirm, setPasswordConfirm] = useState("");
 
-  function handleSubmit() {
+  const handleError = (err) =>
+    toast.error(err, {
+      position: "bottom-left",
+    });
+  const handleSuccess = (msg) =>
+    toast.success(msg, {
+      position: "bottom-right",
+    });
+
+  async function handleSubmit() {
     console.log(email, password, passwordConfirm);
+    try {
+      const { data } = await axios.post(
+        "http://localhost:5000/signup",
+        {
+          email,
+          password,
+          username: "test",
+        },
+        config
+      );
+      const { success, message } = data;
+      console.log(success, data);
+      if (success) {
+        handleSuccess(message);
+        setTimeout(() => {
+          navigate("/");
+        }, 1000);
+      } else {
+        console.log(message);
+        handleError(message);
+      }
+    } catch (error) {
+      console.log(error);
+    }
   }
 
   return (
