@@ -29,7 +29,7 @@ export default function SignIn() {
   const navigate = useNavigate();
   return (
     <>
-      <div style={{ margin: "30px" }}>
+      <div className="m-32">
         <center>
           <Box sx={{ maxWidth: 500 }}>
             <Card variant="outlined">
@@ -42,19 +42,20 @@ export default function SignIn() {
                     id="email"
                     label="Identifiant (email)"
                     variant="outlined"
-                    style={{ margin: 24, width: "90%" }}
+                    className="m-24"
+                    style={{ width: "90%" }}
                     onChange={(e) => setEmail(e.target.value)}
                   />
                   <TextField
                     id="password"
                     label="Mot de passe"
                     variant="outlined"
-                    style={{ margin: 24, width: "90%" }}
+                    style={{ width: "90%" }}
                     onChange={(e) => setPassword(e.target.value)}
                   />
                   <Button
                     variant="contained"
-                    style={{ margin: 24, width: "90%" }}
+                    style={{ width: "90%" }}
                     onClick={handleSubmit}
                   >
                     Se connecter
