@@ -12,7 +12,7 @@ export default function Map() {
     lng: 80.6337262, // default longitude
   };
   const { isLoaded, loadError } = useLoadScript({
-    googleMapsApiKey: "AIzaSyDOzx3OEjfNPUYKXwdjB5xdWbO--MVw0po",
+    googleMapsApiKey: process.env.REACT_APP_GOOGLE_MAPS_API_KEY,
     libraries,
   });
 
