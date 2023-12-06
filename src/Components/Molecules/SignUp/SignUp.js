@@ -31,6 +31,7 @@ const config = {
 export default function SignUp() {
   const navigate = useNavigate();
 
+  const [username, setUsername] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [passwordConfirm, setPasswordConfirm] = useState("");
@@ -52,7 +53,7 @@ export default function SignUp() {
         {
           email,
           password,
-          username: "test",
+          username,
         },
         config
       );
@@ -84,8 +85,15 @@ export default function SignUp() {
                 </Typography>
                 <form>
                   <TextField
+                    id="username"
+                    label="Identifiant"
+                    variant="outlined"
+                    style={{ margin: 24, width: "90%" }}
+                    onChange={(e) => setUsername(e.target.value)}
+                  />
+                  <TextField
                     id="email"
-                    label="Identifiant (email)"
+                    label="Email"
                     variant="outlined"
                     style={{ margin: 24, width: "90%" }}
                     onChange={(e) => setEmail(e.target.value)}
