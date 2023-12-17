@@ -75,7 +75,7 @@ export default function SignUp() {
 
   return (
     <>
-      <div style={{ margin: "30px" }}>
+      <div className="m-32">
         <center>
           <Box sx={{ maxWidth: 500 }}>
             <Card variant="outlined">

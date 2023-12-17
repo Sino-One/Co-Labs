@@ -8,25 +8,39 @@ import Box from "@mui/material/Box";
 import Card from "@mui/material/Card";
 import { useNavigate } from "react-router-dom";
 import { useState } from "react";
-
-const bull = (
-  <Box
-    component="span"
-    sx={{ display: "inline-block", mx: "2px", transform: "scale(0.8)" }}
-  >
-    •
-  </Box>
-);
+import axios from "axios";
 
 export default function SignIn() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
-  function handleSubmit() {
-    console.log(email, password);
-  }
-
   const navigate = useNavigate();
+
+  const handleSubmit = async () => {
+    try {
+      const { data } = await axios.post(
+        "http://localhost:5000/login",
+        {
+          email,
+          password,
+        },
+        { withCredentials: true }
+      );
+      console.log(data);
+      const { success, message } = data;
+      if (success) {
+        console.log(success, message);
+        setTimeout(() => {
+          navigate("/");
+        }, 1000);
+      } else {
+        console.log(message);
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   return (
     <>
       <div className="m-32">
@@ -43,19 +57,19 @@ export default function SignIn() {
                     label="Identifiant (email)"
                     variant="outlined"
                     className="m-24"
-                    style={{ width: "90%" }}
+                    style={{ margin: 24, width: "90%" }}
                     onChange={(e) => setEmail(e.target.value)}
                   />
                   <TextField
                     id="password"
                     label="Mot de passe"
                     variant="outlined"
-                    style={{ width: "90%" }}
+                    style={{ margin: 24, width: "90%" }}
                     onChange={(e) => setPassword(e.target.value)}
                   />
                   <Button
                     variant="contained"
-                    style={{ width: "90%" }}
+                    style={{ margin: 24, width: "90%" }}
                     onClick={handleSubmit}
                   >
                     Se connecter

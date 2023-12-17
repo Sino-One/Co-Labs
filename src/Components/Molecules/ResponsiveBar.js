@@ -19,7 +19,12 @@ const pages = [
   { name: "Appels à projets", href: "/projets", current: false },
   { name: "Mes projets", href: "/mesProjets", current: false },
 ];
-const settings = ["Profile", "Logout"];
+
+const settings = [
+  { name: "Créer un compte", route: "/SignUp" },
+  { name: "Se connecter", route: "/SignIn" },
+  { name: "Se déconnecter", route: "/logout" },
+];
 
 function classNames(...classes) {
   return classes.filter(Boolean).join(" ");
@@ -29,7 +34,7 @@ function isCurrent(location, path) {
   return location.pathname === path;
 }
 
-function ResponsiveAppBar() {
+function ResponsiveAppBar({ logOut }) {
   const [anchorElNav, setAnchorElNav] = React.useState(null);
   const [anchorElUser, setAnchorElUser] = React.useState(null);
 
@@ -47,8 +52,13 @@ function ResponsiveAppBar() {
     setAnchorElNav(null);
   };
 
-  const handleCloseUserMenu = () => {
+  const handleCloseUserMenu = (route) => {
     setAnchorElUser(null);
+    if (route === "/logout") {
+      logOut();
+      return;
+    }
+    navigate(route);
   };
 
   const redirect = (page) => {
@@ -160,7 +170,7 @@ function ResponsiveAppBar() {
 
             <Box sx={{ flexGrow: 0 }}>
               <Tooltip title="Open settings">
-                <IconButton onClick={() => navigate("/signIn")} sx={{ p: 0 }}>
+                <IconButton sx={{ p: 0 }} onClick={handleOpenUserMenu}>
                   <Avatar alt="Remy Sharp" src="/static/images/avatar/2.jpg" />
                 </IconButton>
               </Tooltip>
@@ -181,8 +191,11 @@ function ResponsiveAppBar() {
                 onClose={handleCloseUserMenu}
               >
                 {settings.map((setting) => (
-                  <MenuItem key={setting} onClick={handleCloseUserMenu}>
-                    <Typography textAlign="center">{setting}</Typography>
+                  <MenuItem
+                    key={setting.name}
+                    onClick={() => handleCloseUserMenu(setting.route)}
+                  >
+                    <Typography textAlign="center">{setting.name}</Typography>
                   </MenuItem>
                 ))}
               </Menu>
