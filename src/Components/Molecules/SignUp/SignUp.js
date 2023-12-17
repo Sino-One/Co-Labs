@@ -62,7 +62,7 @@ export default function SignUp() {
       if (success) {
         handleSuccess(message);
         setTimeout(() => {
-          navigate("/");
+          navigate("/home");
         }, 1000);
       } else {
         console.log(message);
@@ -102,6 +102,7 @@ export default function SignUp() {
                     id="password"
                     label="Mot de passe"
                     variant="outlined"
+                    type="password"
                     style={{ margin: 24, width: "90%" }}
                     onChange={(e) => setPassword(e.target.value)}
                   />
@@ -109,6 +110,7 @@ export default function SignUp() {
                     id="passwordConfirm"
                     label="Confirmer le mot de passe"
                     variant="outlined"
+                    type="password"
                     style={{ margin: 24, width: "90%" }}
                     onChange={(e) => setPasswordConfirm(e.target.value)}
                   />

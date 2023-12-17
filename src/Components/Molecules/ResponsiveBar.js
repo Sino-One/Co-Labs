@@ -68,7 +68,7 @@ function ResponsiveAppBar({ logOut }) {
 
   return (
     <>
-      <AppBar position="static">
+      <AppBar position="static" style={{ backgroundColor: "grey" }}>
         <Container maxWidth="xl">
           <Toolbar disableGutters>
             <AdbIcon sx={{ display: { xs: "none", md: "flex" }, mr: 1 }} />
@@ -76,7 +76,7 @@ function ResponsiveAppBar({ logOut }) {
               variant="h6"
               noWrap
               component="a"
-              href="/"
+              href="/home"
               sx={{
                 mr: 2,
                 display: { xs: "none", md: "flex" },

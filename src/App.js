@@ -24,28 +24,26 @@ function App() {
   const [username, setUsername] = useState("");
   const [isAuth, setIsAuth] = useState(false);
   useEffect(() => {
-    console.log(cookies);
-    const isAuth = async () => {
+    const isAuthenticated = async () => {
       try {
         const { data } = await axios.post(
           "http://localhost:5000/userVerification",
           {},
           { withCredentials: true }
         );
-        console.log(data);
         const { status, user } = data;
-        if (status) {
-          setUsername(user);
-          setIsAuth(true);
-        } else {
-          setIsAuth(false);
-        }
+        setIsAuth(status);
+        setUsername(user);
       } catch (error) {
         console.log(error);
       }
     };
-    isAuth();
-  }, [cookies, navigate, removeCookie]);
+    isAuthenticated();
+  }, [cookies]);
+
+  useEffect(() => {
+    console.log(isAuth);
+  }, [isAuth]);
 
   const logOut = () => {
     AuthService.CallLogOut();
@@ -64,7 +62,7 @@ function App() {
         <Route
           path="/home"
           element={
-            <Protected isLoggedIn={isAuth}>
+            <Protected isLoggedIn={cookies}>
               <Home />
             </Protected>
           }
@@ -73,7 +71,7 @@ function App() {
         <Route
           path="/structures"
           element={
-            <Protected isLoggedIn={isAuth}>
+            <Protected isLoggedIn={cookies}>
               <Structures />
             </Protected>
           }
@@ -81,7 +79,7 @@ function App() {
         <Route
           path="/projets"
           element={
-            <Protected isLoggedIn={isAuth}>
+            <Protected isLoggedIn={cookies}>
               <Projects />
             </Protected>
           }
@@ -89,7 +87,7 @@ function App() {
         <Route
           path="/mesProjets"
           element={
-            <Protected isLoggedIn={isAuth}>
+            <Protected isLoggedIn={cookies}>
               <Blog />
             </Protected>
           }
@@ -97,7 +95,7 @@ function App() {
         <Route
           path="/bases"
           element={
-            <Protected isLoggedIn={isAuth}>
+            <Protected isLoggedIn={cookies}>
               <Bases />
             </Protected>
           }

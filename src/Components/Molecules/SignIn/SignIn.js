@@ -31,7 +31,7 @@ export default function SignIn() {
       if (success) {
         console.log(success, message);
         setTimeout(() => {
-          navigate("/");
+          navigate("/home");
         }, 1000);
       } else {
         console.log(message);
@@ -64,6 +64,7 @@ export default function SignIn() {
                     id="password"
                     label="Mot de passe"
                     variant="outlined"
+                    type="password"
                     style={{ margin: 24, width: "90%" }}
                     onChange={(e) => setPassword(e.target.value)}
                   />
