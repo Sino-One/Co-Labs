@@ -24,6 +24,10 @@ export default function Bases() {
     };
     navigate("/userPrefs", { state: { user } });
   }
+
+  function handleCreateStructure() {
+    navigate("/creationStructure");
+  }
   return (
     <>
       <div style={{ margin: "50px" }}>
@@ -53,6 +57,7 @@ export default function Bases() {
                     <Button
                       variant="contained"
                       style={{ marginTop: 32, height: "40px" }}
+                      onClick={handleCreateStructure}
                     >
                       +
                     </Button>

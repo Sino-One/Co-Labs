@@ -1,4 +1,5 @@
 const User = require("../Models/UserModel");
+const Structure = require("../models/StructureModel");
 const { createSecretToken } = require("../util/SecretToken");
 const bcrypt = require("bcryptjs");
 
@@ -60,7 +61,6 @@ module.exports.Signup = async (req, res, next) => {
       animation,
       sante,
     } = req.body.user;
-    console.log(req.body);
     const existingUser = await User.findOne({ email });
     if (existingUser) {
       return res.json({ message: "User already exists" });
@@ -100,30 +100,32 @@ module.exports.Signup = async (req, res, next) => {
   }
 };
 
-module.exports.bases = async (req, res, next) => {
+module.exports.CreationStructure = async (req, res, next) => {
   try {
-    const { email, profession, structure } = req.body;
-
-    const updatedUser = await User.updateOne(
-      { email: email },
-      { profession: profession, structure: structure },
-      { new: true, runValidators: true }
-    );
-
-    res.status(202).json({
-      status: "success",
-      data: {
-        user: updatedUser,
-      },
+    const { nom, type, adresse, effectif, secteur } = req.body;
+    const existingStructure = await Structure.findOne({ nom });
+    if (existingStructure) {
+      return res.json({ message: "Structure already exists" });
+    }
+    const newStructure = await Structure.create({
+      nom,
+      type,
+      adresse,
+      effectif,
+      secteur,
+      createdAt: new Date(),
     });
+
+    if (newStructure) {
+      res.status(201).json({
+        message: "Structure created successfully",
+        success: true,
+        newStructure,
+      });
+    }
+
     next();
   } catch (error) {
     console.error(error);
   }
 };
-
-module.exports.CreationStructure = async (req, res, next) => {};
-
-module.exports.UserPrefs = async (req, res, next) => {};
-
-// TODO : Suite à la création avec signup, les routes bases creation et user prefs doivent modifer l'utilisateur crée et crée une structure
