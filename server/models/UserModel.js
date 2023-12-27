@@ -13,7 +13,36 @@ const userSchema = new mongoose.Schema({
   },
   password: {
     type: String,
-    required: [true, "Your password is required"],
+  },
+  profession: {
+    type: String,
+  },
+  structure: {
+    type: String,
+  },
+  animation: {
+    type: Boolean,
+  },
+  mediation: {
+    type: Boolean,
+  },
+  sante: {
+    type: Boolean,
+  },
+  availability: {
+    type: Boolean,
+  },
+  social: {
+    type: Boolean,
+  },
+  culturel: {
+    type: Boolean,
+  },
+  sportif: {
+    type: Boolean,
+  },
+  nature: {
+    type: Boolean,
   },
   createdAt: {
     type: Date,

@@ -2,31 +2,11 @@ import React from "react";
 import { Divider, TextField } from "@mui/material";
 import CardContent from "@mui/material/CardContent";
 import Typography from "@mui/material/Typography";
-import CardActions from "@mui/material/CardActions";
 import Button from "@mui/material/Button";
 import Box from "@mui/material/Box";
 import Card from "@mui/material/Card";
 import { useNavigate } from "react-router-dom";
 import { useState } from "react";
-import { ToastContainer, toast } from "react-toastify";
-import axios from "axios";
-
-const bull = (
-  <Box
-    component="span"
-    sx={{ display: "inline-block", mx: "2px", transform: "scale(0.8)" }}
-  >
-    •
-  </Box>
-);
-
-const config = {
-  headers: {
-    "Access-Control-Allow-Origin": "*",
-    "Access-Control-Allow-Methods": "GET,PUT,POST,DELETE,PATCH,OPTIONS",
-    withCredentials: true,
-  },
-};
 
 export default function SignUp() {
   const navigate = useNavigate();
@@ -36,41 +16,14 @@ export default function SignUp() {
   const [password, setPassword] = useState("");
   const [passwordConfirm, setPasswordConfirm] = useState("");
 
-  const handleError = (err) =>
-    toast.error(err, {
-      position: "bottom-left",
-    });
-  const handleSuccess = (msg) =>
-    toast.success(msg, {
-      position: "bottom-right",
-    });
-
   async function handleSubmit() {
     console.log(email, password, passwordConfirm);
-    try {
-      const { data } = await axios.post(
-        "http://localhost:5000/signup",
-        {
-          email,
-          password,
-          username,
-        },
-        config
-      );
-      const { success, message } = data;
-      console.log(success, data);
-      if (success) {
-        handleSuccess(message);
-        setTimeout(() => {
-          navigate("/home");
-        }, 1000);
-      } else {
-        console.log(message);
-        handleError(message);
-      }
-    } catch (error) {
-      console.log(error);
-    }
+    const user = {
+      email,
+      password,
+      username,
+    };
+    navigate("/bases", { state: { user } });
   }
 
   return (
@@ -95,6 +48,7 @@ export default function SignUp() {
                     id="email"
                     label="Email"
                     variant="outlined"
+                    type="email"
                     style={{ margin: 24, width: "90%" }}
                     onChange={(e) => setEmail(e.target.value)}
                   />

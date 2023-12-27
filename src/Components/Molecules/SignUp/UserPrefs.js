@@ -7,10 +7,19 @@ import ButtonGroup from "@mui/material/ButtonGroup";
 import Box from "@mui/material/Box";
 import Card from "@mui/material/Card";
 import { Checkbox } from "@mui/material";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 import FormGroup from "@mui/material/FormGroup";
 import FormControlLabel from "@mui/material/FormControlLabel";
 import { useState } from "react";
+import axios from "axios";
+
+const config = {
+  headers: {
+    "Access-Control-Allow-Origin": "*",
+    "Access-Control-Allow-Methods": "GET,PUT,POST,DELETE,PATCH,OPTIONS",
+    withCredentials: true,
+  },
+};
 
 export default function UserPrefs() {
   const [dispo, setDispo] = useState(true);
@@ -24,7 +33,9 @@ export default function UserPrefs() {
 
   const navigate = useNavigate();
 
-  function handleSubmit(event) {
+  const prevUser = useLocation().state.user;
+
+  async function handleSubmit(event) {
     event.preventDefault();
     console.log(
       dispo,
@@ -37,6 +48,37 @@ export default function UserPrefs() {
       sante
     );
     // navigate("/");
+    const user = {
+      ...prevUser,
+      availability: dispo,
+      social: social,
+      culturel: culturel,
+      sportif: sportif,
+      nature: nature,
+      mediation: mediation,
+      animation: animation,
+      sante: sante,
+    };
+    try {
+      const { data } = await axios.post(
+        "http://localhost:5000/signup",
+        {
+          user,
+        },
+        config
+      );
+      const { success, message } = data;
+      console.log(success, data);
+      if (success) {
+        setTimeout(() => {
+          navigate("/home");
+        }, 1000);
+      } else {
+        console.log(message);
+      }
+    } catch (error) {
+      console.log(error);
+    }
   }
 
   return (

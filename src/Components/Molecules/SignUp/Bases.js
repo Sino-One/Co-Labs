@@ -5,29 +5,24 @@ import Typography from "@mui/material/Typography";
 import Button from "@mui/material/Button";
 import Box from "@mui/material/Box";
 import Card from "@mui/material/Card";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 import { useState } from "react";
-
-const bull = (
-  <Box
-    component="span"
-    sx={{ display: "inline-block", mx: "2px", transform: "scale(0.8)" }}
-  >
-    •
-  </Box>
-);
 
 export default function Bases() {
   const navigate = useNavigate();
+  const prevUser = useLocation().state.user;
 
   const [profession, setProfession] = useState("");
   const [structure, setStructure] = useState("");
 
-  function handleSubmit(event) {
-    event.preventDefault();
+  async function handleSubmit() {
     console.log(profession, structure);
-    // navigate("/userPrefs"); ou
-    // navigate("/creationStructure");
+    const user = {
+      ...prevUser,
+      profession,
+      structure,
+    };
+    navigate("/userPrefs", { state: { user } });
   }
   return (
     <>

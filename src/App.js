@@ -92,14 +92,7 @@ function App() {
             </Protected>
           }
         />
-        <Route
-          path="/bases"
-          element={
-            <Protected isLoggedIn={cookies}>
-              <Bases />
-            </Protected>
-          }
-        />
+        <Route path="/bases" element={<Bases />} />
 
         {/* <Route path="/auth" element={<Auth/>}/>
         <Route path="/modal" element={<Modal/>}/>
