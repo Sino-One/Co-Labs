@@ -21,6 +21,10 @@ const StructureSchema = new mongoose.Schema({
     type: String,
     required: [true, "Your secteur is required"],
   },
+  createdAt: {
+    type: Date,
+    default: new Date(),
+  },
 });
 
 module.exports = mongoose.model("Structure", StructureSchema);
