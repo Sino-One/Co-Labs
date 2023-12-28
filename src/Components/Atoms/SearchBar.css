@@ -34,7 +34,7 @@ input:focus {
   margin-left: 24px;
   margin-top: -24px;
   width: 80%;
-  height: 200px;
+  height: auto;
   background-color: white;
   box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
   overflow: hidden;

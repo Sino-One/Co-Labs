@@ -39,11 +39,10 @@ function SearchBar({ placeholder, data, onSearch }) {
       <div className="searchInputs">
         <TextField
           id="username"
-          label="Structure"
+          label={placeholder}
           variant="outlined"
           style={{ margin: 24, width: "80%" }}
           type="text"
-          placeholder={placeholder}
           value={wordEntered}
           onChange={handleFilter}
           InputProps={{
