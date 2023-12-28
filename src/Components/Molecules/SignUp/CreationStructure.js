@@ -8,25 +8,9 @@ import Card from "@mui/material/Card";
 import { useNavigate } from "react-router-dom";
 import { useState } from "react";
 import * as Api from "../../../Utils/Api";
-import {
-  setKey,
-  setLanguage,
-  setRegion,
-  geocode,
-  RequestType,
-} from "react-geocode";
+import { getGeocode } from "../../../Utils/GeoCode";
 import SearchBar from "../../Atoms/SearchBar";
 import AdressSearchBar from "../../Atoms/AdressSearchBar";
-
-setKey(process.env.REACT_APP_GOOGLE_MAPS_API_KEY); // Your API key here.
-
-// Set default response language (optional).
-// This sets the default language for geocoding responses.
-setLanguage("fr"); // Default language for responses.
-
-// Set default response region (optional).
-// This sets the default region for geocoding responses.
-setRegion("fr"); // Default region for responses.
 
 export default function CreationStructure() {
   const [nomStructure, setNomStructure] = useState("");
@@ -96,7 +80,7 @@ export default function CreationStructure() {
                     placeholder={"Adresse de votre structure"}
                     data={adressResult}
                     onSearch={(e) => {
-                      geocode(RequestType.ADDRESS, e)
+                      getGeocode("address", e)
                         .then((response) => {
                           setAdressResult(
                             response.results[0].formatted_address
