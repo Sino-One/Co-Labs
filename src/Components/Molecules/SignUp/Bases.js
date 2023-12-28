@@ -19,6 +19,7 @@ export default function Bases() {
   const [structures, setStructures] = useState([]);
 
   useEffect(() => {
+    console.log(structure);
     const getStructures = async () => {
       try {
         const data = await axios.get("http://localhost:5000/getStructures");
@@ -68,7 +69,11 @@ export default function Bases() {
                     <SearchBar
                       placeholder={"Nom de votre structure"}
                       data={structures}
-                      onSearch={(e) => setStructure(e)}
+                      onSearch={(e) =>
+                        structures.forEach((item) => {
+                          if (item.nom === e) setStructure(item);
+                        })
+                      }
                     />
                     <Button
                       variant="contained"

@@ -1,6 +1,6 @@
 const mongoose = require("mongoose");
 const bcrypt = require("bcryptjs");
-
+const Schema = mongoose.Schema;
 const userSchema = new mongoose.Schema({
   email: {
     type: String,
@@ -20,28 +20,10 @@ const userSchema = new mongoose.Schema({
   structure: {
     type: String,
   },
-  animation: {
-    type: Boolean,
-  },
-  mediation: {
-    type: Boolean,
-  },
-  sante: {
-    type: Boolean,
+  preferences: {
+    type: Schema.Types.Mixed,
   },
   availability: {
-    type: Boolean,
-  },
-  social: {
-    type: Boolean,
-  },
-  culturel: {
-    type: Boolean,
-  },
-  sportif: {
-    type: Boolean,
-  },
-  nature: {
     type: Boolean,
   },
   createdAt: {

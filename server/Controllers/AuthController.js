@@ -52,13 +52,8 @@ module.exports.Signup = async (req, res, next) => {
       username,
       profession,
       structure,
-      social,
-      culturel,
-      sportif,
-      nature,
-      mediation,
-      animation,
-      sante,
+      preferences,
+      availability,
     } = req.body.user;
     const existingUser = await User.findOne({ email });
     if (existingUser) {
@@ -70,13 +65,8 @@ module.exports.Signup = async (req, res, next) => {
       username,
       profession,
       structure,
-      social,
-      culturel,
-      sportif,
-      nature,
-      mediation,
-      animation,
-      sante,
+      preferences,
+      availability,
       createdAt: new Date(),
     });
     const token = createSecretToken(newUser._id);

@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { TextField } from "@mui/material";
 import CardContent from "@mui/material/CardContent";
 import Typography from "@mui/material/Typography";
@@ -23,42 +23,32 @@ const config = {
 
 export default function UserPrefs() {
   const [dispo, setDispo] = useState(true);
-  const [social, setSocial] = useState(false);
-  const [culturel, setCulturel] = useState(false);
-  const [sportif, setSportif] = useState(false);
-  const [nature, setNature] = useState(false);
-  const [mediation, setMediation] = useState(false);
-  const [animation, setAnimation] = useState(false);
-  const [sante, setSante] = useState(false);
+
+  const [preferences, setPreferences] = useState({
+    social: false,
+    culturel: false,
+    sportif: false,
+    nature: false,
+    mediation: false,
+    animation: false,
+    sante: false,
+  });
 
   const navigate = useNavigate();
 
   const prevUser = useLocation().state.user;
+  console.log(prevUser);
 
   async function handleSubmit(event) {
     event.preventDefault();
-    console.log(
-      dispo,
-      social,
-      culturel,
-      sportif,
-      nature,
-      mediation,
-      animation,
-      sante
-    );
+    console.log(dispo, preferences);
     // navigate("/");
     const user = {
       ...prevUser,
       availability: dispo,
-      social: social,
-      culturel: culturel,
-      sportif: sportif,
-      nature: nature,
-      mediation: mediation,
-      animation: animation,
-      sante: sante,
+      preferences: preferences,
     };
+    console.log(user);
     try {
       const { data } = await axios.post(
         "http://localhost:5000/signup",
@@ -95,8 +85,13 @@ export default function UserPrefs() {
                   <FormControlLabel
                     control={
                       <Checkbox
-                        value={social}
-                        onChange={(e) => setSocial(e.target.checked)}
+                        value={preferences.social}
+                        onChange={(e) =>
+                          setPreferences({
+                            ...preferences,
+                            social: e.target.checked,
+                          })
+                        }
                       />
                     }
                     label="Projet social"
@@ -104,8 +99,13 @@ export default function UserPrefs() {
                   <FormControlLabel
                     control={
                       <Checkbox
-                        value={culturel}
-                        onChange={(e) => setCulturel(e.target.checked)}
+                        value={preferences.culturel}
+                        onChange={(e) =>
+                          setPreferences({
+                            ...preferences,
+                            culturel: e.target.checked,
+                          })
+                        }
                       />
                     }
                     label="Projet culturel"
@@ -113,8 +113,13 @@ export default function UserPrefs() {
                   <FormControlLabel
                     control={
                       <Checkbox
-                        value={sportif}
-                        onChange={(e) => setSportif(e.target.checked)}
+                        value={preferences.sportif}
+                        onChange={(e) =>
+                          setPreferences({
+                            ...preferences,
+                            sportif: e.target.checked,
+                          })
+                        }
                       />
                     }
                     label="Projet sportif"
@@ -122,8 +127,13 @@ export default function UserPrefs() {
                   <FormControlLabel
                     control={
                       <Checkbox
-                        value={nature}
-                        onChange={(e) => setNature(e.target.checked)}
+                        value={preferences.nature}
+                        onChange={(e) =>
+                          setPreferences({
+                            ...preferences,
+                            nature: e.target.checked,
+                          })
+                        }
                       />
                     }
                     label="Projet nature"
@@ -131,8 +141,13 @@ export default function UserPrefs() {
                   <FormControlLabel
                     control={
                       <Checkbox
-                        value={mediation}
-                        onChange={(e) => setMediation(e.target.checked)}
+                        value={preferences.mediation}
+                        onChange={(e) =>
+                          setPreferences({
+                            ...preferences,
+                            mediation: e.target.checked,
+                          })
+                        }
                       />
                     }
                     label="Médiation"
@@ -140,8 +155,13 @@ export default function UserPrefs() {
                   <FormControlLabel
                     control={
                       <Checkbox
-                        value={animation}
-                        onChange={(e) => setAnimation(e.target.checked)}
+                        value={preferences.animation}
+                        onChange={(e) =>
+                          setPreferences({
+                            ...preferences,
+                            animation: e.target.checked,
+                          })
+                        }
                       />
                     }
                     label="Animation"
@@ -149,8 +169,13 @@ export default function UserPrefs() {
                   <FormControlLabel
                     control={
                       <Checkbox
-                        value={sante}
-                        onChange={(e) => setSante(e.target.checked)}
+                        value={preferences.sante}
+                        onChange={(e) =>
+                          setPreferences({
+                            ...preferences,
+                            sante: e.target.checked,
+                          })
+                        }
                       />
                     }
                     label="Santé"
