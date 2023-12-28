@@ -19,7 +19,7 @@ const inputStyle = {
   textOverflow: `ellipses`,
   position: "absolute",
   top: "10px",
-  right: "10px",
+  right: "75px",
 };
 
 export default function Map() {
