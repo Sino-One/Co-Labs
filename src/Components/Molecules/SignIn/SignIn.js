@@ -8,7 +8,7 @@ import Box from "@mui/material/Box";
 import Card from "@mui/material/Card";
 import { useNavigate } from "react-router-dom";
 import { useState } from "react";
-import axios from "axios";
+import * as Api from "../../../Utils/Api";
 
 export default function SignIn() {
   const [email, setEmail] = useState("");
@@ -18,14 +18,10 @@ export default function SignIn() {
 
   const handleSubmit = async () => {
     try {
-      const { data } = await axios.post(
-        "http://localhost:5000/login",
-        {
-          email,
-          password,
-        },
-        { withCredentials: true }
-      );
+      const { data } = await Api.post("login", {
+        email,
+        password,
+      });
       console.log(data);
       const { success, message } = data;
       if (success) {

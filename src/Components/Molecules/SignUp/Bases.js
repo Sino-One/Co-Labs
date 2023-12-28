@@ -8,7 +8,7 @@ import Card from "@mui/material/Card";
 import { useNavigate, useLocation } from "react-router-dom";
 import { useState } from "react";
 import SearchBar from "../../Atoms/SearchBar";
-import axios from "axios";
+import * as Api from "../../../Utils/Api";
 
 export default function Bases() {
   const navigate = useNavigate();
@@ -19,17 +19,12 @@ export default function Bases() {
   const [structures, setStructures] = useState([]);
 
   useEffect(() => {
-    console.log(structure);
     const getStructures = async () => {
-      try {
-        const data = await axios.get("http://localhost:5000/getStructures");
-        if (data.data) {
-          setStructures(data.data);
-        } else {
-          console.log("erreur de chargement des structures");
-        }
-      } catch (error) {
-        console.log(error);
+      const data = await Api.get("getStructures");
+      if (data.data) {
+        setStructures(data.data);
+      } else {
+        console.log("erreur de chargement des structures");
       }
     };
     getStructures();

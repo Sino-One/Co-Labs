@@ -7,15 +7,7 @@ import Box from "@mui/material/Box";
 import Card from "@mui/material/Card";
 import { useNavigate } from "react-router-dom";
 import { useState } from "react";
-import axios from "axios";
-
-const config = {
-  headers: {
-    "Access-Control-Allow-Origin": "*",
-    "Access-Control-Allow-Methods": "GET,PUT,POST,DELETE,PATCH,OPTIONS",
-    withCredentials: true,
-  },
-};
+import * as Api from "../../../Utils/Api";
 
 export default function CreationStructure() {
   const [nomStructure, setNomStructure] = useState("");
@@ -35,29 +27,21 @@ export default function CreationStructure() {
       tailleStructure,
       secteurStructure
     );
-    try {
-      const { data } = await axios.post(
-        "http://localhost:5000/creationStructure",
-        {
-          nom: nomStructure,
-          type: typeStructure,
-          adresse: adresseStructure,
-          effectif: tailleStructure,
-          secteur: secteurStructure,
-        },
-        config
-      );
-      const { success, message } = data;
-      console.log(success, data);
-      if (success) {
-        setTimeout(() => {
-          navigate(-1);
-        }, 1000);
-      } else {
-        console.log(message);
-      }
-    } catch (error) {
-      console.log(error);
+    const { data } = await Api.post("creationStructure", {
+      nom: nomStructure,
+      type: typeStructure,
+      adresse: adresseStructure,
+      effectif: tailleStructure,
+      secteur: secteurStructure,
+    });
+    const { success, message } = data;
+    console.log(success, data);
+    if (success) {
+      setTimeout(() => {
+        navigate(-1);
+      }, 1000);
+    } else {
+      console.log(message);
     }
   }
 

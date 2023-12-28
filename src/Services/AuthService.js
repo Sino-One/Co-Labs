@@ -1,17 +1,13 @@
-import axios from "axios";
+import * as Api from "../Utils/Api";
 
-const isAuth = () => {
-  const { data } = axios.post(
-    "http://localhost:5000/userVerification",
-    {},
-    { withCredentials: true }
-  );
+const isAuth = async () => {
+  const { data } = await Api.post("userVerification", {});
   console.log(data);
   return data;
 };
 
 const logOut = () => {
-  axios.get("http://localhost:5000/logout", {}, { withCredentials: true });
+  Api.get("logout");
 };
 
 const AuthService = {

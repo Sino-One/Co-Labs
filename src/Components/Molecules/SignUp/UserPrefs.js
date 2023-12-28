@@ -11,15 +11,7 @@ import { useNavigate, useLocation } from "react-router-dom";
 import FormGroup from "@mui/material/FormGroup";
 import FormControlLabel from "@mui/material/FormControlLabel";
 import { useState } from "react";
-import axios from "axios";
-
-const config = {
-  headers: {
-    "Access-Control-Allow-Origin": "*",
-    "Access-Control-Allow-Methods": "GET,PUT,POST,DELETE,PATCH,OPTIONS",
-    withCredentials: true,
-  },
-};
+import * as Api from "../../../Utils/Api";
 
 export default function UserPrefs() {
   const [dispo, setDispo] = useState(true);
@@ -49,25 +41,17 @@ export default function UserPrefs() {
       preferences: preferences,
     };
     console.log(user);
-    try {
-      const { data } = await axios.post(
-        "http://localhost:5000/signup",
-        {
-          user,
-        },
-        config
-      );
-      const { success, message } = data;
-      console.log(success, data);
-      if (success) {
-        setTimeout(() => {
-          navigate("/home");
-        }, 1000);
-      } else {
-        console.log(message);
-      }
-    } catch (error) {
-      console.log(error);
+    const { data } = await Api.post("signup", {
+      user,
+    });
+    const { success, message } = data;
+    console.log(success, data);
+    if (success) {
+      setTimeout(() => {
+        navigate("/home");
+      }, 1000);
+    } else {
+      console.log(message);
     }
   }
 
