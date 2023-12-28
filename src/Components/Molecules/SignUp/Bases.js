@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { TextField } from "@mui/material";
 import CardContent from "@mui/material/CardContent";
 import Typography from "@mui/material/Typography";
@@ -7,6 +7,8 @@ import Box from "@mui/material/Box";
 import Card from "@mui/material/Card";
 import { useNavigate, useLocation } from "react-router-dom";
 import { useState } from "react";
+import SearchBar from "../../Atoms/SearchBar";
+import axios from "axios";
 
 export default function Bases() {
   const navigate = useNavigate();
@@ -14,9 +16,25 @@ export default function Bases() {
 
   const [profession, setProfession] = useState("");
   const [structure, setStructure] = useState("");
+  const [structures, setStructures] = useState([]);
+
+  useEffect(() => {
+    const getStructures = async () => {
+      try {
+        const data = await axios.get("http://localhost:5000/getStructures");
+        if (data.data) {
+          setStructures(data.data);
+        } else {
+          console.log("erreur de chargement des structures");
+        }
+      } catch (error) {
+        console.log(error);
+      }
+    };
+    getStructures();
+  }, [structure]);
 
   async function handleSubmit() {
-    console.log(profession, structure);
     const user = {
       ...prevUser,
       profession,
@@ -47,16 +65,14 @@ export default function Bases() {
                     onChange={(e) => setProfession(e.target.value)}
                   />
                   <div style={{ display: "flex" }}>
-                    <TextField
-                      id="structure"
-                      label="Votre structure"
-                      variant="outlined"
-                      style={{ margin: 24, width: "90%" }}
-                      onChange={(e) => setStructure(e.target.value)}
+                    <SearchBar
+                      placeholder={"Nom de votre structure"}
+                      data={structures}
+                      onSearch={(e) => setStructure(e)}
                     />
                     <Button
                       variant="contained"
-                      style={{ marginTop: 32, height: "40px" }}
+                      style={{ marginTop: 32, height: "40px", marginLeft: -64 }}
                       onClick={handleCreateStructure}
                     >
                       +

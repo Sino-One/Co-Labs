@@ -1,9 +1,5 @@
-const {
-  Signup,
-  Login,
-  Logout,
-  CreationStructure,
-} = require("../Controllers/AuthController");
+const { Signup, Login, Logout } = require("../Controllers/AuthController");
+const { CreationStructure } = require("../Controllers/StructuresController");
 const { userVerification } = require("../Middlewares/AuthMiddleware");
 const { bases } = require("../Controllers/AuthController");
 const router = require("express").Router();

@@ -1,5 +1,4 @@
 const User = require("../Models/UserModel");
-const Structure = require("../models/StructureModel");
 const { createSecretToken } = require("../util/SecretToken");
 const bcrypt = require("bcryptjs");
 
@@ -91,36 +90,6 @@ module.exports.Signup = async (req, res, next) => {
         message: "User signed in successfully",
         success: true,
         newUser,
-      });
-    }
-
-    next();
-  } catch (error) {
-    console.error(error);
-  }
-};
-
-module.exports.CreationStructure = async (req, res, next) => {
-  try {
-    const { nom, type, adresse, effectif, secteur } = req.body;
-    const existingStructure = await Structure.findOne({ nom });
-    if (existingStructure) {
-      return res.json({ message: "Structure already exists" });
-    }
-    const newStructure = await Structure.create({
-      nom,
-      type,
-      adresse,
-      effectif,
-      secteur,
-      createdAt: new Date(),
-    });
-
-    if (newStructure) {
-      res.status(201).json({
-        message: "Structure created successfully",
-        success: true,
-        newStructure,
       });
     }
 

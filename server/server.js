@@ -23,6 +23,7 @@ const app = express();
 require("dotenv").config();
 const cookieParser = require("cookie-parser");
 const authRoute = require("./routes/AuthRoute");
+const appRoute = require("./routes/AppRoute");
 const { ATLAS_URI, PORT } = process.env;
 
 mongoose
@@ -49,3 +50,4 @@ app.use(cookieParser());
 app.use(express.json());
 
 app.use("/", authRoute);
+app.use("/", appRoute);
