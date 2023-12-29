@@ -21,6 +21,7 @@ export default function SignUp() {
     const user = {
       email,
       password,
+      confirmPassword: passwordConfirm,
       username,
     };
     navigate("/bases", { state: { user } });
