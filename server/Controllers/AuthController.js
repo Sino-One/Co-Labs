@@ -1,16 +1,17 @@
 const User = require("../models/UserModel");
 const { createSecretToken } = require("../utils/SecretToken");
-const bcrypt = require("bcryptjs");
 const AppError = require("../utils/appError");
 const CatchAsync = require("../utils/CatchAsync");
 
 const createSendToken = (user, statusCode, res) => {
   const token = createSecretToken(user._id);
   const cookieOptions = {
-    expiresIn: new Date(Date.now() + process.env.JWT_COOKIE_EXPIRES_IN),
+    expiresIn: new Date(
+      Date.now() + process.env.JWT_COOKIE_EXPIRES_IN * 24 * 60 * 60 * 1000
+    ), // on convertit en heures, puis en minutes, puis en secondes, puis en millisecondes
     httpOnly: true,
   };
-  if (process.env.NODE_ENV === "production") cookieOptions.secure = true;
+  if (process.env.NODE_ENV === "production") cookieOptions.secure = true; // set cookie only on https connection
 
   res.cookie("jwt", token, cookieOptions);
 
@@ -43,6 +44,7 @@ module.exports.Login = CatchAsync(async (req, res, next) => {
   }
 
   createSendToken(user, 200, res);
+  next();
 });
 
 module.exports.Logout = (req, res) => {
@@ -83,6 +85,7 @@ module.exports.Signup = async (req, res, next) => {
     });
 
     createSendToken(newUser, 201, res);
+    next();
   } catch (error) {
     console.error(error);
   }

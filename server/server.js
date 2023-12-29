@@ -40,14 +40,22 @@ app.listen(PORT, () => {
 
 app.use(
   cors({
-    origin: ["http://localhost:5000"],
-    methods: ["GET", "POST", "PUT", "DELETE"],
+    origin: "http://localhost:3000",
+    methods: "GET,PUT,POST,DELETE,PATCH,OPTIONS",
     credentials: true,
   })
 );
+
 app.use(cookieParser());
 
 app.use(express.json());
+
+app.use((req, res, next) => {
+  req.requestTime = new Date().toISOString();
+  console.log("here ", req.cookies);
+  // console.log("here ", req.headers);
+  next();
+});
 
 app.use("/", authRoute);
 app.use("/", appRoute);
