@@ -7,7 +7,7 @@ const CatchAsync = require("../utils/CatchAsync");
 const createSendToken = (user, statusCode, res) => {
   const token = createSecretToken(user._id);
   const cookieOptions = {
-    expires: new Date(Date.now() + process.env.JWT_COOKIE_EXPIRES_IN),
+    expiresIn: new Date(Date.now() + process.env.JWT_COOKIE_EXPIRES_IN),
     httpOnly: true,
   };
   if (process.env.NODE_ENV === "production") cookieOptions.secure = true;
