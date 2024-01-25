@@ -24,14 +24,14 @@ export default function SignIn() {
       });
       console.log(data);
       const { success, message } = data;
-      // if (success) {
-      //   console.log(success, message);
-      //   setTimeout(() => {
-      //     navigate("/home");
-      //   }, 1000);
-      // } else {
-      //   console.log(message);
-      // }
+      if (success) {
+        console.log(success, message);
+        setTimeout(() => {
+          navigate("/home");
+        }, 1000);
+      } else {
+        console.log(message);
+      }
     } catch (error) {
       console.log(error);
     }

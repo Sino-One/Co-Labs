@@ -1,12 +1,22 @@
-import React from 'react'
-import CardComponent from '../Molecules/Card';
-import Grid from '@mui/material/Unstable_Grid2'; // Grid version 2
-
+import React from "react";
+import CardComponent from "../Molecules/Card";
+import Grid from "@mui/material/Unstable_Grid2"; // Grid version 2
+import { useContext } from "react";
+import { AppContext } from "../../store/app-context";
 
 export default function Home() {
+  const appContext = useContext(AppContext);
+
+  console.log(appContext);
+
   return (
     <>
-    <Grid container spacing={12} columnSpacing={{ xs: 1, sm: 2, md: 3 }} style={{margin: "30px", justifyContent: "center"}}>
+      <Grid
+        container
+        spacing={12}
+        columnSpacing={{ xs: 1, sm: 2, md: 3 }}
+        style={{ margin: "30px", justifyContent: "center" }}
+      >
         <Grid xs="auto">
           <CardComponent>xs=6 md=8</CardComponent>
         </Grid>
@@ -18,5 +28,5 @@ export default function Home() {
         </Grid>
       </Grid>
     </>
-  )
+  );
 }

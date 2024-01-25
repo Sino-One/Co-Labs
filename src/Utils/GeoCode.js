@@ -6,6 +6,8 @@ import {
   RequestType,
 } from "react-geocode";
 
+// doc : https://www.npmjs.com/package/react-geocode
+
 setKey(process.env.REACT_APP_GOOGLE_MAPS_API_KEY); // Your API key here.
 
 // Set default response language (optional).
@@ -17,6 +19,7 @@ setLanguage("fr"); // Default language for responses.
 setRegion("fr"); // Default region for responses.
 
 export const getGeocode = (type, value) => {
+  console.log(type, value);
   switch (type) {
     case "address":
       return geocode(RequestType.ADDRESS, value);

@@ -15,6 +15,7 @@ import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import AuthService from "./Services/AuthService";
 import IsNotAuth from "./Components/Pages/IsNotAuth";
+import { AppContext } from "./store/app-context";
 
 function App() {
   const navigate = useNavigate();
@@ -33,48 +34,49 @@ function App() {
 
   return (
     <>
-      <ResponsiveAppBar logOut={() => logOut()}></ResponsiveAppBar>
-      <Routes>
-        <Route path="/signIn" element={<SignIn />} />
-        <Route path="/signUp" element={<SignUp />} />
-        <Route path="/creationStructure" element={<CreationStructure />} />
-        <Route path="/" element={<IsNotAuth />} />
-        <Route
-          path="/home"
-          element={
-            <Protected isLoggedIn={isAuth}>
-              <Home />
-            </Protected>
-          }
-        />
-        <Route path="/userPrefs" element={<UserPrefs />} />
-        <Route
-          path="/structures"
-          element={
-            <Protected isLoggedIn={isAuth}>
-              <Structures />
-            </Protected>
-          }
-        />
-        <Route
-          path="/projets"
-          element={
-            <Protected isLoggedIn={isAuth}>
-              <Projects />
-            </Protected>
-          }
-        />
-        <Route
-          path="/mesProjets"
-          element={
-            <Protected isLoggedIn={isAuth}>
-              <Blog />
-            </Protected>
-          }
-        />
-        <Route path="/bases" element={<Bases />} />
+      <AppContext.Provider value={{ user: null, structures: [] }}>
+        <ResponsiveAppBar logOut={() => logOut()}></ResponsiveAppBar>
+        <Routes>
+          <Route path="/signIn" element={<SignIn />} />
+          <Route path="/signUp" element={<SignUp />} />
+          <Route path="/creationStructure" element={<CreationStructure />} />
+          <Route path="/" element={<IsNotAuth />} />
+          <Route
+            path="/home"
+            element={
+              <Protected isLoggedIn={isAuth}>
+                <Home />
+              </Protected>
+            }
+          />
+          <Route path="/userPrefs" element={<UserPrefs />} />
+          <Route
+            path="/structures"
+            element={
+              <Protected isLoggedIn={isAuth}>
+                <Structures />
+              </Protected>
+            }
+          />
+          <Route
+            path="/projets"
+            element={
+              <Protected isLoggedIn={isAuth}>
+                <Projects />
+              </Protected>
+            }
+          />
+          <Route
+            path="/mesProjets"
+            element={
+              <Protected isLoggedIn={isAuth}>
+                <Blog />
+              </Protected>
+            }
+          />
+          <Route path="/bases" element={<Bases />} />
 
-        {/* <Route path="/auth" element={<Auth/>}/>
+          {/* <Route path="/auth" element={<Auth/>}/>
         <Route path="/modal" element={<Modal/>}/>
         <Route path="/sama" element={<Protected isLoggedIn={AuthService.CallIsAuth()}>
           <Sama/>
@@ -92,7 +94,8 @@ function App() {
           <Profile/>
         </Protected>}/>
         <Route path="*" element={<NotFound/>}/> */}
-      </Routes>
+        </Routes>
+      </AppContext.Provider>
     </>
   );
 }
