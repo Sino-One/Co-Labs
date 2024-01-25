@@ -16,6 +16,7 @@ import { useNavigate } from "react-router-dom";
 import AuthService from "./Services/AuthService";
 import IsNotAuth from "./Components/Pages/IsNotAuth";
 import { AppContext } from "./store/app-context";
+import CreateProject from "./Components/Pages/CreateProject";
 
 function App() {
   const navigate = useNavigate();
@@ -71,6 +72,14 @@ function App() {
             element={
               <Protected isLoggedIn={isAuth}>
                 <Blog />
+              </Protected>
+            }
+          />
+          <Route
+            path="/createProject"
+            element={
+              <Protected isLoggedIn={isAuth}>
+                <CreateProject />
               </Protected>
             }
           />

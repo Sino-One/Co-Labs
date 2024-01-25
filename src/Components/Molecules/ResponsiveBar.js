@@ -21,6 +21,7 @@ const pages = [
 ];
 
 const settings = [
+  { name: "Profil", route: "/profil" },
   { name: "Créer un compte", route: "/SignUp" },
   { name: "Se connecter", route: "/SignIn" },
   { name: "Se déconnecter", route: "/logout" },

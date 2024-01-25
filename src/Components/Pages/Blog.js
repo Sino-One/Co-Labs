@@ -1,7 +1,14 @@
-import React from 'react'
+import { Button } from "@mui/material";
+import React from "react";
+import { useNavigate } from "react-router-dom";
 
 export default function Blog() {
+  const navigate = useNavigate();
   return (
-    <div>Blog</div>
-  )
+    <>
+      <Button variant="contained" onClick={() => navigate("/createProject")}>
+        Créer un projet
+      </Button>
+    </>
+  );
 }
