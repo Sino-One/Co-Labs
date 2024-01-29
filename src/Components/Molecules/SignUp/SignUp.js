@@ -24,6 +24,7 @@ export default function SignUp() {
       confirmPassword: passwordConfirm,
       username,
     };
+    console.log(user);
     navigate("/bases", { state: { user } });
   }
 

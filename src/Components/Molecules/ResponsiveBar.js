@@ -77,7 +77,7 @@ function ResponsiveAppBar({ logOut }) {
               variant="h6"
               noWrap
               component="a"
-              href="/home"
+              onClick={() => navigate("/home")}
               sx={{
                 mr: 2,
                 display: { xs: "none", md: "flex" },
@@ -86,6 +86,7 @@ function ResponsiveAppBar({ logOut }) {
                 letterSpacing: ".3rem",
                 color: "inherit",
                 textDecoration: "none",
+                cursor: "pointer",
               }}
             >
               LOGO
@@ -132,7 +133,7 @@ function ResponsiveAppBar({ logOut }) {
               variant="h5"
               noWrap
               component="a"
-              href=""
+              onClick={() => navigate("/home")}
               sx={{
                 mr: 2,
                 display: { xs: "flex", md: "none" },
@@ -148,9 +149,9 @@ function ResponsiveAppBar({ logOut }) {
             </Typography>
             <Box sx={{ flexGrow: 1, display: { xs: "none", md: "flex" } }}>
               {pages.map((page, index) => (
-                <a
+                <div
                   key={index}
-                  href={page.href}
+                  onClick={() => redirect(page)}
                   className={classNames(
                     isCurrent(location, page.href)
                       ? "bg-gray-900 text-white"
@@ -165,7 +166,7 @@ function ResponsiveAppBar({ logOut }) {
                   >
                     {page.name}
                   </Button>
-                </a>
+                </div>
               ))}
             </Box>
 

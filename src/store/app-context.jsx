@@ -1,6 +1,8 @@
 import { createContext } from "react";
 
-export const AppContext = createContext({
+export const UserContext = createContext({
   user: null,
+});
+export const StructuresContext = createContext({
   structures: [],
 });

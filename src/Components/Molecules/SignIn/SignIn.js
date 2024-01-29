@@ -8,34 +8,12 @@ import Box from "@mui/material/Box";
 import Card from "@mui/material/Card";
 import { useNavigate } from "react-router-dom";
 import { useState } from "react";
-import * as Api from "../../../Utils/Api";
 
-export default function SignIn() {
+export default function SignIn({ handleSignIn }) {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
   const navigate = useNavigate();
-
-  const handleSubmit = async () => {
-    try {
-      const { data } = await Api.post("login", {
-        email,
-        password,
-      });
-      console.log(data);
-      const { success, message } = data;
-      if (success) {
-        console.log(success, message);
-        setTimeout(() => {
-          navigate("/home");
-        }, 1000);
-      } else {
-        console.log(message);
-      }
-    } catch (error) {
-      console.log(error);
-    }
-  };
 
   return (
     <>
@@ -67,7 +45,7 @@ export default function SignIn() {
                   <Button
                     variant="contained"
                     style={{ margin: 24, width: "90%" }}
-                    onClick={handleSubmit}
+                    onClick={() => handleSignIn({ email, password })}
                   >
                     Se connecter
                   </Button>

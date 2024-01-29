@@ -15,6 +15,9 @@ const createSendToken = (user, statusCode, res) => {
   };
   if (process.env.NODE_ENV === "production") cookieOptions.secure = true; // set cookie only on https connection
 
+  console.log("token", token);
+  console.log("cookieOptions", cookieOptions);
+
   res.cookie("jwt", token, cookieOptions);
 
   // Remove password from output
@@ -69,11 +72,22 @@ module.exports.Signup = async (req, res, next) => {
       preferences,
       availability,
       confirmPassword,
-    } = req.body.user;
+    } = req.body;
     const existingUser = await User.findOne({ email });
     if (existingUser) {
       return res.json({ message: "User already exists" });
     }
+    console.log({
+      email,
+      password,
+      username,
+      profession,
+      structure,
+      preferences,
+      availability,
+      confirmPassword,
+      createdAt: new Date(),
+    });
     const newUser = await User.create({
       email,
       password,
@@ -125,4 +139,32 @@ module.exports.protect = CatchAsync(async (req, res, next) => {
   // GRANT ACCESS TO PROTECTED ROUTE
   req.user = currentUser;
   next();
+});
+
+// Only for rendered pages, no errors!
+module.exports.isLoggedIn = CatchAsync(async (req, res, next) => {
+  try {
+    if (req.cookies.jwt) {
+      // 2) Verify token
+      const decoded = await promisify(jwt.verify)(
+        req.cookies.jwt,
+        process.env.JWT_SECRET
+      );
+
+      // 3) Check if user still exists
+      const currentUser = await User.findById(decoded.id);
+      if (!currentUser) {
+        return next();
+      }
+
+      // THERE IS A LOGGED IN USER
+      res.locals.user = currentUser;
+    }
+    // Whether there's a token or not, continue to the next middleware
+    next();
+  } catch (error) {
+    // Handle any potential errors during token verification or user retrieval
+    console.error(error);
+    next(error); // Pass the error to the error handling middleware
+  }
 });

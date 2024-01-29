@@ -2,13 +2,8 @@ import React from "react";
 import CardComponent from "../Molecules/Card";
 import Grid from "@mui/material/Unstable_Grid2"; // Grid version 2
 import { useContext } from "react";
-import { AppContext } from "../../store/app-context";
 
 export default function Home() {
-  const appContext = useContext(AppContext);
-
-  console.log(appContext);
-
   return (
     <>
       <Grid

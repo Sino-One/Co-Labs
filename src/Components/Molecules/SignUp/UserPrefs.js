@@ -13,7 +13,7 @@ import FormControlLabel from "@mui/material/FormControlLabel";
 import { useState } from "react";
 import * as Api from "../../../Utils/Api";
 
-export default function UserPrefs() {
+export default function UserPrefs({ handleSignUp }) {
   const [dispo, setDispo] = useState(true);
 
   const [preferences, setPreferences] = useState({
@@ -33,26 +33,13 @@ export default function UserPrefs() {
 
   async function handleSubmit(event) {
     event.preventDefault();
-    console.log(dispo, preferences);
     // navigate("/");
     const user = {
       ...prevUser,
       availability: dispo,
       preferences: preferences,
     };
-    console.log(user);
-    const { data } = await Api.post("signup", {
-      user,
-    });
-    const { success, message } = data;
-    console.log(success, data);
-    if (success) {
-      setTimeout(() => {
-        navigate("/home");
-      }, 1000);
-    } else {
-      console.log(message);
-    }
+    handleSignUp(user);
   }
 
   return (

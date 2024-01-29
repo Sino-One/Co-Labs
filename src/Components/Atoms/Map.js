@@ -94,9 +94,7 @@ export default function Map() {
     if (structures) {
       structures.map((structure) =>
         fromAddress(structure.adresse).then((response) => {
-          console.log(response);
           const { lat, lng } = response.results[0].geometry.location;
-          console.log(lat, lng);
           newMarkers.push({ ...structure, lat: lat, lng: lng });
           setMarkers(newMarkers);
         })
