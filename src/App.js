@@ -11,18 +11,25 @@ import SignUp from "./Components/Molecules/SignUp/SignUp";
 import Bases from "./Components/Molecules/SignUp/Bases";
 import CreationStructure from "./Components/Molecules/SignUp/CreationStructure";
 import UserPrefs from "./Components/Molecules/SignUp/UserPrefs";
-import { useContext, useEffect, useState } from "react";
+import { useContext, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import AuthService from "./Services/AuthService";
 import IsNotAuth from "./Components/Pages/IsNotAuth";
 import CreateProject from "./Components/Pages/CreateProject";
-import { UserContext, StructuresContext } from "./store/app-context";
-import * as Api from "./Utils/Api";
+import { UserContext } from "./store/UserReducer";
+import { StructuresContext } from "./store/StructuresReducer";
+import StructureService from "./Services/StructureService";
+import StructuresContextProvider from "./store/StructuresReducer";
+import UserContextProvider from "./store/UserReducer";
 
 function App() {
   const navigate = useNavigate();
-  const [user, setUser] = useState(null);
-  const [structures, setStructures] = useState(null);
+  const { user } = useContext(UserContext);
+  const { setStructures } = useContext(StructuresContext);
+
+  useEffect(() => {
+    fetchStructures();
+  }, []);
 
   const logOut = () => {
     AuthService.CallLogOut();
@@ -30,30 +37,19 @@ function App() {
     navigate("/signIn");
   };
 
-  const handleSignIn = async (data) => {
-    AuthService.CallSignIn(data).then((user) => {
-      setUser(user);
-      navigate("/home");
-    });
-  };
-
-  const handleSignUp = async (data) => {
-    AuthService.CallSignUp(data).then((user) => {
-      setUser(user);
-      navigate("/home");
+  const fetchStructures = async () => {
+    await StructureService.getAllStructures().then((structures) => {
+      setStructures(structures);
     });
   };
 
   return (
     <>
-      <UserContext.Provider value={user}>
-        <StructuresContext.Provider value={structures}>
+      <UserContextProvider>
+        <StructuresContextProvider>
           <ResponsiveAppBar logOut={() => logOut()}></ResponsiveAppBar>
           <Routes>
-            <Route
-              path="/signIn"
-              element={<SignIn handleSignIn={handleSignIn} />}
-            />
+            <Route path="/signIn" element={<SignIn />} />
             <Route path="/signUp" element={<SignUp />} />
             <Route path="/creationStructure" element={<CreationStructure />} />
             <Route path="/" element={<IsNotAuth />} />
@@ -65,10 +61,7 @@ function App() {
                 </Protected>
               }
             />
-            <Route
-              path="/userPrefs"
-              element={<UserPrefs handleSignUp={handleSignUp} />}
-            />
+            <Route path="/userPrefs" element={<UserPrefs />} />
             <Route
               path="/structures"
               element={
@@ -122,8 +115,8 @@ function App() {
         </Protected>}/>
         <Route path="*" element={<NotFound/>}/> */}
           </Routes>
-        </StructuresContext.Provider>
-      </UserContext.Provider>
+        </StructuresContextProvider>
+      </UserContextProvider>
     </>
   );
 }

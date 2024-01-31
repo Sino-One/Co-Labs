@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import {
   GoogleMap,
   useLoadScript,
@@ -12,6 +12,8 @@ import Slider from "@mui/material/Slider";
 import InputLabel from "@mui/material/InputLabel";
 import MenuItem from "@mui/material/MenuItem";
 import Select from "@mui/material/Select";
+import Annuaire from "./Annuaire";
+import { StructuresContext } from "../../store/StructuresReducer";
 
 const inputStyle = {
   boxSizing: `border-box`,
@@ -59,35 +61,17 @@ export default function Map() {
   const mapContainerStyle = {
     width: "100vw",
     height: "50vh",
-    marginTop: "64px",
+    marginTop: "24px",
   };
   const { isLoaded, loadError } = useLoadScript({
     googleMapsApiKey: process.env.REACT_APP_GOOGLE_MAPS_API_KEY,
     libraries,
   });
   const [markers, setMarkers] = useState([]);
-  const [structures, setStructures] = useState([]);
   const [filteredMarkers, setFilteredMarkers] = useState([]); // Les marqueurs filtrés
   const [center, setCenter] = useState({ lat: 0, lng: 0 }); // Le point central
   const [radius, setRadius] = useState(30); // Le rayon de recherche
-
-  const getAllStructures = async () => {
-    try {
-      const { data } = await Api.get("getStructures");
-      const { success, message } = data;
-      if (data) {
-        setStructures(data);
-      } else {
-        console.log(message);
-      }
-    } catch (error) {
-      console.log(error);
-    }
-  };
-
-  useEffect(() => {
-    getAllStructures();
-  }, []);
+  const { structures } = useContext(StructuresContext);
 
   useEffect(() => {
     let newMarkers = [];
@@ -101,6 +85,8 @@ export default function Map() {
       );
     }
   }, [structures]);
+
+  console.log(structures);
 
   useEffect(() => {
     if (markers.length > 0) {
@@ -134,7 +120,7 @@ export default function Map() {
 
   return (
     <div>
-      <div style={{ display: "flex" }}>
+      <div style={{ display: "flex", margin: "24px 24px 0 24px" }}>
         <Slider
           aria-label="Rayon de recherche"
           defaultValue={30}
@@ -146,30 +132,38 @@ export default function Map() {
           onChange={(e, v) => setRadius(v)}
           style={{ width: "50%", margin: "auto" }}
         />
-        <InputLabel id="demo-simple-select-label">Public accueillis</InputLabel>
-        <Select
-          labelId="demo-simple-select-label"
-          id="demo-simple-select"
-          value={10}
-          label="Public accueillis"
-          onChange={() => {}}
-        >
-          <MenuItem value={10}>Ten</MenuItem>
-          <MenuItem value={20}>Twenty</MenuItem>
-          <MenuItem value={30}>Thirty</MenuItem>
-        </Select>
-        <InputLabel id="demo-simple-select-label">Type de structure</InputLabel>
-        <Select
-          labelId="demo-simple-select-label"
-          id="demo-simple-select"
-          value={10}
-          label="Type de structure"
-          onChange={() => {}}
-        >
-          <MenuItem value={10}>Social</MenuItem>
-          <MenuItem value={20}>Médico-social</MenuItem>
-          <MenuItem value={30}>Mixte</MenuItem>
-        </Select>
+        <div style={{ display: "block" }}>
+          <InputLabel id="demo-simple-select-label">
+            Public accueillis
+          </InputLabel>
+          <Select
+            labelId="demo-simple-select-label"
+            id="demo-simple-select"
+            value={10}
+            label="Public accueillis"
+            onChange={() => {}}
+          >
+            <MenuItem value={10}>Ten</MenuItem>
+            <MenuItem value={20}>Twenty</MenuItem>
+            <MenuItem value={30}>Thirty</MenuItem>
+          </Select>
+        </div>
+        <div style={{ display: "block" }}>
+          <InputLabel id="demo-simple-select-label">
+            Type de structure
+          </InputLabel>
+          <Select
+            labelId="demo-simple-select-label"
+            id="demo-simple-select"
+            value={10}
+            label="Type de structure"
+            onChange={() => {}}
+          >
+            <MenuItem value={10}>Social</MenuItem>
+            <MenuItem value={20}>Médico-social</MenuItem>
+            <MenuItem value={30}>Mixte</MenuItem>
+          </Select>
+        </div>
       </div>
       <GoogleMap
         mapContainerStyle={mapContainerStyle}
@@ -192,6 +186,7 @@ export default function Map() {
           />
         ))}
       </GoogleMap>
+      <Annuaire data={filteredMarkers} />
     </div>
   );
 }

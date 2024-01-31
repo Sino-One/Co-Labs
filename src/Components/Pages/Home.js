@@ -1,9 +1,22 @@
 import React from "react";
 import CardComponent from "../Molecules/Card";
 import Grid from "@mui/material/Unstable_Grid2"; // Grid version 2
-import { useContext } from "react";
+import { useContext, useEffect } from "react";
+import { StructuresContext } from "../../store/StructuresReducer";
+import StructureService from "../../Services/StructureService";
 
 export default function Home() {
+  const { setStructures } = useContext(StructuresContext);
+
+  useEffect(() => {
+    async function fetchStructures() {
+      await StructureService.getAllStructures().then((structures) => {
+        setStructures(structures);
+      });
+    }
+    fetchStructures();
+  }, []);
+
   return (
     <>
       <Grid

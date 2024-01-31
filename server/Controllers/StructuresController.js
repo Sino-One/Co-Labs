@@ -43,3 +43,47 @@ module.exports.getAllStructures = async (req, res, next) => {
     console.error(error);
   }
 };
+module.exports.addProject = async (req, res, next) => {
+  try {
+    const {
+      idStructure,
+      projectName,
+      visible,
+      tags,
+      structureType,
+      description,
+    } = req.body;
+    const structure = await Structure.findById(idStructure);
+
+    if (structure) {
+      console.log(structure.nom);
+      const newProject = {
+        projectName,
+        visible,
+        tags,
+        structureType,
+        description,
+      };
+      // structure.projets = new Array();
+      if (!structure?.projets) {
+        structure.projets = [];
+      }
+      structure.projets.push(newProject);
+      await Structure.updateOne({ _id: idStructure }, structure);
+      res.status(201).json({
+        message: "Project created successfully",
+        success: true,
+        structure,
+      });
+      console.log(structure);
+      next();
+    } else {
+      res.status(404).json({
+        message: "Structure not found",
+        success: false,
+      });
+    }
+  } catch (error) {
+    console.error(error);
+  }
+};

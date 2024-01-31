@@ -11,9 +11,11 @@ import { useNavigate, useLocation } from "react-router-dom";
 import FormGroup from "@mui/material/FormGroup";
 import FormControlLabel from "@mui/material/FormControlLabel";
 import { useState } from "react";
-import * as Api from "../../../Utils/Api";
-
-export default function UserPrefs({ handleSignUp }) {
+import AuthService from "../../../Services/AuthService";
+import { useContext } from "react";
+import { UserContext } from "../../../store/UserReducer";
+export default function UserPrefs() {
+  const { setUser } = useContext(UserContext);
   const [dispo, setDispo] = useState(true);
 
   const [preferences, setPreferences] = useState({
@@ -41,6 +43,13 @@ export default function UserPrefs({ handleSignUp }) {
     };
     handleSignUp(user);
   }
+
+  const handleSignUp = async (data) => {
+    await AuthService.CallSignUp(data).then((user) => {
+      setUser(user);
+      navigate("/home");
+    });
+  };
 
   return (
     <>

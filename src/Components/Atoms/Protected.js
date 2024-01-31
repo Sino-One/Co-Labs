@@ -1,6 +1,6 @@
 import { useContext } from "react";
 import { Navigate } from "react-router-dom";
-import { UserContext } from "../../store/app-context";
+import { UserContext } from "../../store/UserReducer";
 
 function Protected({ isLoggedIn, children }) {
   const user = useContext(UserContext);

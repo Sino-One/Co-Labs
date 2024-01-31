@@ -8,12 +8,24 @@ import Box from "@mui/material/Box";
 import Card from "@mui/material/Card";
 import { useNavigate } from "react-router-dom";
 import { useState } from "react";
+import AuthService from "../../../Services/AuthService";
+import { useContext } from "react";
+import { UserContext } from "../../../store/UserReducer";
 
-export default function SignIn({ handleSignIn }) {
+export default function SignIn() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
   const navigate = useNavigate();
+
+  const { setUser } = useContext(UserContext);
+
+  const handleSignIn = async (data) => {
+    await AuthService.CallSignIn(data).then((user) => {
+      setUser(user);
+      navigate("/home");
+    });
+  };
 
   return (
     <>

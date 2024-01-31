@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useReducer } from "react";
 import { Divider, Select, TextField } from "@mui/material";
 import CardContent from "@mui/material/CardContent";
 import Typography from "@mui/material/Typography";
@@ -12,13 +12,17 @@ import FormGroup from "@mui/material/FormGroup";
 import FormControlLabel from "@mui/material/FormControlLabel";
 import Checkbox from "@mui/material/Checkbox";
 import Textarea from "@mui/joy/Textarea";
+import { useContext } from "react";
+import StructureService from "../../Services/StructureService";
+import { StructuresContext } from "../../store/StructuresReducer";
+import { UserContext } from "../../store/UserReducer";
 
 export default function CreateProject() {
   const [visible, setVisible] = useState(true);
   const [description, setDescription] = useState("Description de votre projet");
   const [structureType, setStructureType] = useState("Social");
   const [projectName, setProjectName] = useState(null);
-  const [preferences, setPreferences] = useState({
+  const [tags, setTags] = useState({
     social: false,
     culturel: false,
     sportif: false,
@@ -27,18 +31,30 @@ export default function CreateProject() {
     animation: false,
     sante: false,
   });
+
   const navigate = useNavigate();
+  const { user } = useContext(UserContext);
+  const { structures, addProjectToStructure } = useContext(StructuresContext);
+
+  console.log(structures);
 
   const handleSubmit = async (event) => {
     event.preventDefault();
     const project = {
-      name: projectName,
-      description: description,
-      structureType: structureType,
-      visible: visible,
-      preferences: preferences,
+      idStructure: user.structure,
+      projectName,
+      description,
+      structureType,
+      visible,
+      tags,
     };
-    console.log(project);
+    console.log(user);
+    StructureService.addProject(project).then((data) => {
+      if (data) {
+        addProjectToStructure(data.structure);
+      }
+    });
+    console.log(structures);
   };
 
   return (
@@ -123,10 +139,10 @@ export default function CreateProject() {
                   <FormControlLabel
                     control={
                       <Checkbox
-                        value={preferences.social}
+                        value={tags.social}
                         onChange={(e) =>
-                          setPreferences({
-                            ...preferences,
+                          setTags({
+                            ...tags,
                             social: e.target.checked,
                           })
                         }
@@ -137,10 +153,10 @@ export default function CreateProject() {
                   <FormControlLabel
                     control={
                       <Checkbox
-                        value={preferences.culturel}
+                        value={tags.culturel}
                         onChange={(e) =>
-                          setPreferences({
-                            ...preferences,
+                          setTags({
+                            ...tags,
                             culturel: e.target.checked,
                           })
                         }
@@ -151,10 +167,10 @@ export default function CreateProject() {
                   <FormControlLabel
                     control={
                       <Checkbox
-                        value={preferences.sportif}
+                        value={tags.sportif}
                         onChange={(e) =>
-                          setPreferences({
-                            ...preferences,
+                          setTags({
+                            ...tags,
                             sportif: e.target.checked,
                           })
                         }
@@ -165,10 +181,10 @@ export default function CreateProject() {
                   <FormControlLabel
                     control={
                       <Checkbox
-                        value={preferences.nature}
+                        value={tags.nature}
                         onChange={(e) =>
-                          setPreferences({
-                            ...preferences,
+                          setTags({
+                            ...tags,
                             nature: e.target.checked,
                           })
                         }
@@ -179,10 +195,10 @@ export default function CreateProject() {
                   <FormControlLabel
                     control={
                       <Checkbox
-                        value={preferences.mediation}
+                        value={tags.mediation}
                         onChange={(e) =>
-                          setPreferences({
-                            ...preferences,
+                          setTags({
+                            ...tags,
                             mediation: e.target.checked,
                           })
                         }
@@ -193,10 +209,10 @@ export default function CreateProject() {
                   <FormControlLabel
                     control={
                       <Checkbox
-                        value={preferences.animation}
+                        value={tags.animation}
                         onChange={(e) =>
-                          setPreferences({
-                            ...preferences,
+                          setTags({
+                            ...tags,
                             animation: e.target.checked,
                           })
                         }
@@ -207,10 +223,10 @@ export default function CreateProject() {
                   <FormControlLabel
                     control={
                       <Checkbox
-                        value={preferences.sante}
+                        value={tags.sante}
                         onChange={(e) =>
-                          setPreferences({
-                            ...preferences,
+                          setTags({
+                            ...tags,
                             sante: e.target.checked,
                           })
                         }
