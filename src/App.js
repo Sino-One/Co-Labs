@@ -28,8 +28,10 @@ function App() {
   const { setStructures } = useContext(StructuresContext);
 
   useEffect(() => {
-    fetchStructures();
-  }, []);
+    if (user) {
+      fetchStructures();
+    }
+  }, [user]);
 
   const fetchStructures = async () => {
     await StructureService.getAllStructures().then((structures) => {
