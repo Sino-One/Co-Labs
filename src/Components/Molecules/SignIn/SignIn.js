@@ -21,8 +21,8 @@ export default function SignIn() {
   const { setUser } = useContext(UserContext);
 
   const handleSignIn = async (data) => {
-    await AuthService.CallSignIn(data).then((user) => {
-      setUser(user);
+    await AuthService.CallSignIn(data).then((data) => {
+      setUser(data.user);
       navigate("/home");
     });
   };

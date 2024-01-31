@@ -24,18 +24,12 @@ import UserContextProvider from "./store/UserReducer";
 
 function App() {
   const navigate = useNavigate();
-  const { user } = useContext(UserContext);
+  const { user, setUser } = useContext(UserContext);
   const { setStructures } = useContext(StructuresContext);
 
   useEffect(() => {
     fetchStructures();
   }, []);
-
-  const logOut = () => {
-    AuthService.CallLogOut();
-    //   removeCookie("");
-    navigate("/signIn");
-  };
 
   const fetchStructures = async () => {
     await StructureService.getAllStructures().then((structures) => {
@@ -47,7 +41,7 @@ function App() {
     <>
       <UserContextProvider>
         <StructuresContextProvider>
-          <ResponsiveAppBar logOut={() => logOut()}></ResponsiveAppBar>
+          <ResponsiveAppBar></ResponsiveAppBar>
           <Routes>
             <Route path="/signIn" element={<SignIn />} />
             <Route path="/signUp" element={<SignUp />} />

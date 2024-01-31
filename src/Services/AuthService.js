@@ -18,7 +18,7 @@ const handleSignIn = async (forms) => {
     const { data } = await Api.post("login", forms);
     if (data.status === "success") {
       console.log(data);
-      return data.data.user;
+      return data.data;
     } else {
       console.log(data.status);
     }
@@ -28,7 +28,9 @@ const handleSignIn = async (forms) => {
 };
 
 const logOut = () => {
-  Api.get("logout");
+  return Api.post("logout").then((res) => {
+    return res;
+  });
 };
 
 const AuthService = {

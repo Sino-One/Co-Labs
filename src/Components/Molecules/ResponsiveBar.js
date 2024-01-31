@@ -13,6 +13,9 @@ import Tooltip from "@mui/material/Tooltip";
 import MenuItem from "@mui/material/MenuItem";
 import AdbIcon from "@mui/icons-material/Adb";
 import { useLocation, useNavigate } from "react-router-dom";
+import { useContext } from "react";
+import { UserContext } from "../../store/UserReducer";
+import AuthService from "../../Services/AuthService";
 
 const pages = [
   { name: "Structures", href: "/structures", current: false },
@@ -35,9 +38,11 @@ function isCurrent(location, path) {
   return location.pathname === path;
 }
 
-function ResponsiveAppBar({ logOut }) {
+function ResponsiveAppBar() {
   const [anchorElNav, setAnchorElNav] = React.useState(null);
   const [anchorElUser, setAnchorElUser] = React.useState(null);
+
+  const { user, setUser } = useContext(UserContext);
 
   const location = useLocation();
   const navigate = useNavigate();
@@ -65,6 +70,15 @@ function ResponsiveAppBar({ logOut }) {
   const redirect = (page) => {
     navigate(page.href);
     handleCloseNavMenu();
+  };
+
+  const logOut = async () => {
+    await AuthService.CallLogOut().then((res) => {
+      console.log(res);
+      setUser(null);
+    });
+    //   removeCookie("");
+    // navigate("/signIn");
   };
 
   return (
