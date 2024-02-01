@@ -4,6 +4,7 @@ import {
   useLoadScript,
   Marker,
   StandaloneSearchBox,
+  InfoWindow,
 } from "@react-google-maps/api";
 import * as Api from "../../Utils/Api";
 import { getGeocode } from "../../Utils/GeoCode";
@@ -72,6 +73,7 @@ export default function Map() {
   const [center, setCenter] = useState({ lat: 0, lng: 0 }); // Le point central
   const [radius, setRadius] = useState(30); // Le rayon de recherche
   const { structures } = useContext(StructuresContext);
+  const [selectedCenter, setSelectedCenter] = useState(null);
 
   useEffect(() => {
     let newMarkers = [];
@@ -182,9 +184,24 @@ export default function Map() {
           <Marker
             key={marker._id}
             position={{ lat: marker.lat, lng: marker.lng }}
-            onClick={() => console.log(marker)}
+            onClick={() => {
+              setSelectedCenter(marker);
+            }}
           />
         ))}
+        {selectedCenter && (
+          <InfoWindow
+            onCloseClick={() => {
+              setSelectedCenter(null);
+            }}
+            position={{ lat: selectedCenter.lat, lng: selectedCenter.lng }}
+          >
+            <div>
+              <h2>{selectedCenter.nom}</h2>
+              <p>{selectedCenter.adresse}</p>
+            </div>
+          </InfoWindow>
+        )}
       </GoogleMap>
       <Annuaire data={filteredMarkers} />
     </div>
