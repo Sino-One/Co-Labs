@@ -1,7 +1,6 @@
 import "./App.css";
 import ResponsiveAppBar from "./Components/Molecules/ResponsiveBar";
 import Home from "./Components/Pages/Home";
-import Structures from "./Components/Pages/Structures";
 import Projects from "./Components/Pages/Projects";
 import Blog from "./Components/Pages/Blog";
 import Protected from "./Components/Atoms/Protected";
@@ -21,6 +20,8 @@ import { StructuresContext } from "./store/StructuresReducer";
 import StructureService from "./Services/StructureService";
 import StructuresContextProvider from "./store/StructuresReducer";
 import UserContextProvider from "./store/UserReducer";
+import Map from "./Components/Atoms/Map";
+import Structure from "./Components/Pages/Structure";
 
 function App() {
   const navigate = useNavigate();
@@ -62,7 +63,15 @@ function App() {
               path="/structures"
               element={
                 <Protected>
-                  <Structures />
+                  <Map />
+                </Protected>
+              }
+            />
+            <Route
+              path="/structure/:id"
+              element={
+                <Protected>
+                  <Structure />
                 </Protected>
               }
             />

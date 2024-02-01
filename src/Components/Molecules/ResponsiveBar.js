@@ -23,13 +23,6 @@ const pages = [
   { name: "Mes projets", href: "/mesProjets", current: false },
 ];
 
-const settings = [
-  { name: "Profil", route: "/profil" },
-  { name: "Créer un compte", route: "/SignUp" },
-  { name: "Se connecter", route: "/SignIn" },
-  { name: "Se déconnecter", route: "/logout" },
-];
-
 function classNames(...classes) {
   return classes.filter(Boolean).join(" ");
 }
@@ -58,13 +51,26 @@ function ResponsiveAppBar() {
     setAnchorElNav(null);
   };
 
+  const settings = [
+    !user
+      ? { name: "Créer un compte", route: "/SignUp", mustBeLogged: false }
+      : null,
+    !user
+      ? { name: "Se connecter", route: "/SignIn", mustBeLogged: false }
+      : null,
+    user ? { name: "Profil", route: "/profil", mustBeLogged: true } : null,
+    user
+      ? { name: "Se déconnecter", route: "/logout", mustBeLogged: true }
+      : null,
+  ];
+
   const handleCloseUserMenu = (route) => {
     setAnchorElUser(null);
     if (route === "/logout") {
       logOut();
       return;
     }
-    navigate(route);
+    if (route === "/SignIn" || route === "/SignUp") navigate(route);
   };
 
   const redirect = (page) => {
@@ -206,14 +212,20 @@ function ResponsiveAppBar() {
                 open={Boolean(anchorElUser)}
                 onClose={handleCloseUserMenu}
               >
-                {settings.map((setting) => (
-                  <MenuItem
-                    key={setting.name}
-                    onClick={() => handleCloseUserMenu(setting.route)}
-                  >
-                    <Typography textAlign="center">{setting.name}</Typography>
-                  </MenuItem>
-                ))}
+                {settings.map((setting) => {
+                  return (
+                    setting && (
+                      <MenuItem
+                        key={setting.name}
+                        onClick={() => handleCloseUserMenu(setting.route)}
+                      >
+                        <Typography textAlign="center">
+                          {setting.name}
+                        </Typography>
+                      </MenuItem>
+                    )
+                  );
+                })}
               </Menu>
             </Box>
           </Toolbar>

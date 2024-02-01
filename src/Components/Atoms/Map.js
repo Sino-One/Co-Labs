@@ -102,15 +102,22 @@ export default function Map() {
 
   useEffect(() => {
     // Filtrer les marqueurs par distance
-    const filtered = markers.filter((structure) => {
-      const distance = calculateDistance(center, {
-        lat: structure.lat,
-        lng: structure.lng,
-      });
-      return distance <= radius;
-    });
-    setFilteredMarkers(filtered);
-  }, [center, radius]);
+    async function fetchFilteredMarkers() {
+      await setTimeout(() => {
+        const filtered = markers.filter((structure) => {
+          const distance = calculateDistance(center, {
+            lat: structure.lat,
+            lng: structure.lng,
+          });
+          return distance <= radius;
+        });
+        setFilteredMarkers(filtered);
+      }, 100);
+    }
+    if (markers) {
+      fetchFilteredMarkers();
+    }
+  }, [center, radius, markers]);
 
   if (loadError) {
     return <div>Error loading maps</div>;

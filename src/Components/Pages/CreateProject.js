@@ -47,6 +47,7 @@ export default function CreateProject() {
       structureType,
       visible,
       tags,
+      user,
     };
     console.log(user);
     StructureService.addProject(project).then((data) => {

@@ -52,17 +52,18 @@ module.exports.addProject = async (req, res, next) => {
       tags,
       structureType,
       description,
+      user,
     } = req.body;
     const structure = await Structure.findById(idStructure);
 
     if (structure) {
-      console.log(structure.nom);
       const newProject = {
         projectName,
         visible,
         tags,
         structureType,
         description,
+        user,
       };
       // structure.projets = new Array();
       if (!structure?.projets) {
