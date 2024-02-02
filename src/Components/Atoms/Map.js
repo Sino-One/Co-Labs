@@ -8,12 +8,13 @@ import {
 } from "@react-google-maps/api";
 import { fromAddress } from "react-geocode";
 import Slider from "@mui/material/Slider";
-import InputLabel from "@mui/material/InputLabel";
 import MenuItem from "@mui/material/MenuItem";
 import Select from "@mui/material/Select";
 import Annuaire from "./Annuaire";
 import { StructuresContext } from "../../store/StructuresReducer";
 import { Typography } from "@mui/material";
+import ButtonGroup from "@mui/material/ButtonGroup";
+import Button from "@mui/material/Button";
 
 const inputStyle = {
   boxSizing: `border-box`,
@@ -75,6 +76,7 @@ export default function Map() {
   const [selectedCenter, setSelectedCenter] = useState(null);
   const [secteurStructure, setSecteurStructure] = useState("Social");
   const [typeStructure, setTypeStructure] = useState("TODO");
+  const [filter, setFilter] = useState("structure");
 
   useEffect(() => {
     let newMarkers = [];
@@ -130,18 +132,50 @@ export default function Map() {
 
   return (
     <div>
-      <div style={{ display: "flex", margin: "24px 24px 0 24px" }}>
-        <Slider
-          aria-label="Rayon de recherche"
-          defaultValue={30}
-          valueLabelDisplay="auto"
-          step={5}
-          marks
-          min={0}
-          max={110}
-          onChange={(e, v) => setRadius(v)}
-          style={{ width: "50%", margin: "auto" }}
-        />
+      <div
+        style={{
+          display: "flex",
+          flexWrap: "wrap",
+          margin: "24px 24px 0 24px",
+        }}
+      >
+        <ButtonGroup variant="outlined" aria-label="outlined button group">
+          <Button
+            onClick={() => setFilter("structure")}
+            style={{
+              backgroundColor: filter === "structure" ? "lightgreen" : "",
+              width: "50%",
+            }}
+          >
+            Structures
+          </Button>
+          <Button
+            onClick={() => setFilter("projet")}
+            style={{
+              backgroundColor: filter === "projet" ? "lightgreen" : "",
+              width: "50%",
+            }}
+          >
+            Projets
+          </Button>
+        </ButtonGroup>
+        <div
+          style={{ display: "block", width: "25%", margin: "24px 24px 0 24px" }}
+        >
+          <Typography variant="body1" component="div">
+            Rayon de recherche (km)
+          </Typography>
+          <Slider
+            aria-label="Rayon de recherche"
+            defaultValue={30}
+            valueLabelDisplay="auto"
+            step={5}
+            marks
+            min={0}
+            max={110}
+            onChange={(e, v) => setRadius(v)}
+          />
+        </div>
         <div style={{ display: "block" }}>
           <Typography variant="body1" component="div">
             Type de la structure
