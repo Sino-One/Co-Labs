@@ -17,6 +17,10 @@ const StructureSchema = new mongoose.Schema({
     type: String,
     required: [true, "Your effectif is required"],
   },
+  structureType: {
+    type: String,
+    required: [true, "Your structureType is required"],
+  },
   secteur: {
     type: String,
     required: [true, "Your secteur is required"],

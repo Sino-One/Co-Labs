@@ -16,15 +16,14 @@ export default function SignUp() {
   const [password, setPassword] = useState("");
   const [passwordConfirm, setPasswordConfirm] = useState("");
 
-  async function handleSubmit() {
-    console.log(email, password, passwordConfirm);
+  async function handleSubmit(e) {
+    e.preventDefault();
     const user = {
       email,
       password,
       confirmPassword: passwordConfirm,
       username,
     };
-    console.log(user);
     navigate("/bases", { state: { user } });
   }
 
@@ -38,7 +37,7 @@ export default function SignUp() {
                 <Typography variant="h5" component="div">
                   Créer un compte
                 </Typography>
-                <form>
+                <form onSubmit={handleSubmit}>
                   <TextField
                     id="username"
                     label="Identifiant"
@@ -73,7 +72,7 @@ export default function SignUp() {
                   <Button
                     variant="contained"
                     style={{ margin: 24, width: "90%" }}
-                    onClick={handleSubmit}
+                    type="submit"
                   >
                     S'enregistrer
                   </Button>

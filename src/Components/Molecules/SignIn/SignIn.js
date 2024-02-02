@@ -20,7 +20,8 @@ export default function SignIn() {
 
   const { setUser } = useContext(UserContext);
 
-  const handleSignIn = async (data) => {
+  const handleSignIn = async (e, data) => {
+    e.preventDefault();
     await AuthService.CallSignIn(data).then((data) => {
       setUser(data.user);
       navigate("/home");
@@ -37,7 +38,7 @@ export default function SignIn() {
                 <Typography variant="h5" component="div">
                   Se connecter
                 </Typography>
-                <form>
+                <form onSubmit={(e) => handleSignIn(e, { email, password })}>
                   <TextField
                     id="email"
                     label="Identifiant (email)"
@@ -55,9 +56,9 @@ export default function SignIn() {
                     onChange={(e) => setPassword(e.target.value)}
                   />
                   <Button
+                    type="submit"
                     variant="contained"
                     style={{ margin: 24, width: "90%" }}
-                    onClick={() => handleSignIn({ email, password })}
                   >
                     Se connecter
                   </Button>

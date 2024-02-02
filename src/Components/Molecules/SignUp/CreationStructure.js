@@ -9,39 +9,33 @@ import { useNavigate } from "react-router-dom";
 import { useState } from "react";
 import * as Api from "../../../Utils/Api";
 import { getGeocode } from "../../../Utils/GeoCode";
-import SearchBar from "../../Atoms/SearchBar";
 import AdressSearchBar from "../../Atoms/AdressSearchBar";
+import { Select } from "@mui/material";
+import MenuItem from "@mui/material/MenuItem";
 
 export default function CreationStructure() {
   const [nomStructure, setNomStructure] = useState("");
-  const [typeStructure, setTypeStructure] = useState("");
+  const [typeStructure, setTypeStructure] = useState("TODO");
   const [adresseStructure, setAdresseStructure] = useState("");
   const [tailleStructure, setTailleStructure] = useState("");
-  const [secteurStructure, setSecteurStructure] = useState("");
+  const [secteurStructure, setSecteurStructure] = useState("Social");
   const [adressResult, setAdressResult] = useState("");
   const [isDone, setIsDone] = useState(false);
   const [error, setError] = useState(false);
+  const [structureType, setStructureType] = useState("Social");
 
   const navigate = useNavigate();
-
-  const address = "22 Av. Pierre de Coubertin Bis Avignon";
 
   async function handleSubmit(event) {
     event.preventDefault();
     if (isDone && adresseStructure != "") {
-      console.log(
-        nomStructure,
-        typeStructure,
-        adresseStructure,
-        tailleStructure,
-        secteurStructure
-      );
       const { data } = await Api.post("creationStructure", {
         nom: nomStructure,
         type: typeStructure,
         adresse: adresseStructure,
         effectif: tailleStructure,
         secteur: secteurStructure,
+        structureType: structureType,
       });
       const { success, message } = data;
       console.log(success, data);
@@ -68,7 +62,7 @@ export default function CreationStructure() {
                 <Typography variant="h5" component="div">
                   Structure
                 </Typography>
-                <form>
+                <form onSubmit={handleSubmit}>
                   <TextField
                     id="nomStructure"
                     label="Nom de la structure"
@@ -98,30 +92,47 @@ export default function CreationStructure() {
                     error={error}
                   />
                   <TextField
-                    id="typeStructure"
-                    label="Type de la structure"
-                    variant="outlined"
-                    style={{ margin: 24, width: "90%" }}
-                    onChange={(e) => setTypeStructure(e.target.value)}
-                  />
-                  <TextField
                     id="tailleStructure"
                     label="Nombre de professionnel dans la structure"
                     variant="outlined"
                     style={{ margin: 24, width: "90%" }}
                     onChange={(e) => setTailleStructure(e.target.value)}
                   />
-                  <TextField
-                    id="secteurStructure"
-                    label="Secteur d'activité"
-                    variant="outlined"
+                  <Typography variant="body1" component="div">
+                    Secteur d'activité
+                  </Typography>
+                  <Select
                     style={{ margin: 24, width: "90%" }}
+                    labelId="demo-simple-select-label"
+                    id="demo-simple-select"
+                    value={secteurStructure}
+                    label="Secteur d'activité"
                     onChange={(e) => setSecteurStructure(e.target.value)}
-                  />
+                  >
+                    <MenuItem value={"Social"}>Social</MenuItem>
+                    <MenuItem value={"Medico-social"}>Médico-social</MenuItem>
+                    <MenuItem value={"Mixte"}>Mixte</MenuItem>
+                  </Select>
+                  <Typography variant="body1" component="div">
+                    Type de la structure
+                  </Typography>
+                  <Select
+                    style={{ margin: 24, width: "90%" }}
+                    labelId="demo-simple-select-label"
+                    id="demo-simple-select"
+                    value={typeStructure}
+                    label="Type de structure"
+                    onChange={(e) => setTypeStructure(e.target.value)}
+                  >
+                    {/* TODO */}
+                    <MenuItem value={"TODO"}>TODO</MenuItem>
+                    <MenuItem value={"Medico-social"}>TODO</MenuItem>
+                    <MenuItem value={"Mixte"}>TODO</MenuItem>
+                  </Select>
                   <Button
                     variant="contained"
                     style={{ margin: 24, width: "90%", marginTop: "48px" }}
-                    onClick={handleSubmit}
+                    type="submit"
                   >
                     Valider
                   </Button>
