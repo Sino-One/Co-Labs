@@ -15,10 +15,10 @@ import MenuItem from "@mui/material/MenuItem";
 
 export default function CreationStructure() {
   const [nomStructure, setNomStructure] = useState("");
-  const [typeStructure, setTypeStructure] = useState("TODO");
   const [adresseStructure, setAdresseStructure] = useState("");
   const [tailleStructure, setTailleStructure] = useState("");
   const [secteurStructure, setSecteurStructure] = useState("Social");
+  const [typeStructure, setTypeStructure] = useState("TODO");
   const [adressResult, setAdressResult] = useState("");
   const [isDone, setIsDone] = useState(false);
   const [error, setError] = useState(false);

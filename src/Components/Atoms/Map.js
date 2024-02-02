@@ -6,8 +6,6 @@ import {
   StandaloneSearchBox,
   InfoWindow,
 } from "@react-google-maps/api";
-import * as Api from "../../Utils/Api";
-import { getGeocode } from "../../Utils/GeoCode";
 import { fromAddress } from "react-geocode";
 import Slider from "@mui/material/Slider";
 import InputLabel from "@mui/material/InputLabel";
@@ -15,6 +13,7 @@ import MenuItem from "@mui/material/MenuItem";
 import Select from "@mui/material/Select";
 import Annuaire from "./Annuaire";
 import { StructuresContext } from "../../store/StructuresReducer";
+import { Typography } from "@mui/material";
 
 const inputStyle = {
   boxSizing: `border-box`,
@@ -74,6 +73,8 @@ export default function Map() {
   const [radius, setRadius] = useState(30); // Le rayon de recherche
   const { structures } = useContext(StructuresContext);
   const [selectedCenter, setSelectedCenter] = useState(null);
+  const [secteurStructure, setSecteurStructure] = useState("Social");
+  const [typeStructure, setTypeStructure] = useState("TODO");
 
   useEffect(() => {
     let newMarkers = [];
@@ -142,9 +143,44 @@ export default function Map() {
           style={{ width: "50%", margin: "auto" }}
         />
         <div style={{ display: "block" }}>
-          <InputLabel id="demo-simple-select-label">
+          <Typography variant="body1" component="div">
+            Type de la structure
+          </Typography>
+          <Select
+            style={{ margin: 24, width: "90%" }}
+            labelId="demo-simple-select-label"
+            id="demo-simple-select"
+            value={typeStructure}
+            label="Type de structure"
+            onChange={(e) => setTypeStructure(e.target.value)}
+          >
+            {/* TODO */}
+            <MenuItem value={"TODO"}>TODO</MenuItem>
+            <MenuItem value={"Medico-social"}>TODO</MenuItem>
+            <MenuItem value={"Mixte"}>TODO</MenuItem>
+          </Select>
+        </div>
+        <div style={{ display: "block" }}>
+          <Typography variant="body1" component="div">
+            Secteur d'activité
+          </Typography>
+          <Select
+            style={{ margin: 24, width: "180px" }}
+            labelId="demo-simple-select-label"
+            id="demo-simple-select"
+            value={secteurStructure}
+            label="Secteur d'activité"
+            onChange={(e) => setSecteurStructure(e.target.value)}
+          >
+            <MenuItem value={"Social"}>Social</MenuItem>
+            <MenuItem value={"Medico-social"}>Médico-social</MenuItem>
+            <MenuItem value={"Mixte"}>Mixte</MenuItem>
+          </Select>
+        </div>
+        <div style={{ display: "block" }}>
+          <Typography variant="body1" component="div">
             Public accueillis
-          </InputLabel>
+          </Typography>
           <Select
             labelId="demo-simple-select-label"
             id="demo-simple-select"
@@ -155,22 +191,6 @@ export default function Map() {
             <MenuItem value={10}>Ten</MenuItem>
             <MenuItem value={20}>Twenty</MenuItem>
             <MenuItem value={30}>Thirty</MenuItem>
-          </Select>
-        </div>
-        <div style={{ display: "block" }}>
-          <InputLabel id="demo-simple-select-label">
-            Type de structure
-          </InputLabel>
-          <Select
-            labelId="demo-simple-select-label"
-            id="demo-simple-select"
-            value={10}
-            label="Type de structure"
-            onChange={() => {}}
-          >
-            <MenuItem value={10}>Social</MenuItem>
-            <MenuItem value={20}>Médico-social</MenuItem>
-            <MenuItem value={30}>Mixte</MenuItem>
           </Select>
         </div>
       </div>
