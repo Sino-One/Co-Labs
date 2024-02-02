@@ -28,7 +28,7 @@ export default function Bases() {
       }
     };
     getStructures();
-  }, [structure]);
+  }, []);
 
   async function handleSubmit() {
     const user = {
@@ -36,6 +36,7 @@ export default function Bases() {
       profession,
       structure,
     };
+    console.log(structure);
     navigate("/userPrefs", { state: { user } });
   }
 

@@ -36,8 +36,6 @@ export default function CreateProject() {
   const { user } = useContext(UserContext);
   const { structures, addProjectToStructure } = useContext(StructuresContext);
 
-  console.log(structures);
-
   const handleSubmit = async (event) => {
     event.preventDefault();
     const project = {
@@ -53,6 +51,7 @@ export default function CreateProject() {
     StructureService.addProject(project).then((data) => {
       if (data) {
         addProjectToStructure(data.structure);
+        navigate("/mesProjets");
       }
     });
     console.log(structures);

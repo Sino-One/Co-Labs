@@ -6,7 +6,7 @@ const {
 const { protect, isLoggedIn } = require("../Controllers/AuthController");
 
 //router.get("/getStructures", protect, getAllStructures); route protégée auth validation
-router.use(isLoggedIn);
+//router.use(isLoggedIn);
 router.get("/getStructures", getAllStructures);
 router.post("/addProject", addProject);
 

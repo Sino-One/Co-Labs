@@ -2,7 +2,7 @@ import "./App.css";
 import ResponsiveAppBar from "./Components/Molecules/ResponsiveBar";
 import Home from "./Components/Pages/Home";
 import Projects from "./Components/Pages/Projects";
-import Blog from "./Components/Pages/Blog";
+import Blog from "./Components/Pages/Projects";
 import Protected from "./Components/Atoms/Protected";
 import { Route, Routes } from "react-router-dom";
 import SignIn from "./Components/Molecules/SignIn/SignIn";
@@ -22,11 +22,13 @@ import StructuresContextProvider from "./store/StructuresReducer";
 import UserContextProvider from "./store/UserReducer";
 import Map from "./Components/Atoms/Map";
 import Structure from "./Components/Pages/Structure";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 function App() {
-  const navigate = useNavigate();
   const { user, setUser } = useContext(UserContext);
   const { setStructures } = useContext(StructuresContext);
+  const notify = () => toast("Wow so easy !");
 
   useEffect(() => {
     if (user) {
@@ -76,18 +78,10 @@ function App() {
               }
             />
             <Route
-              path="/projets"
-              element={
-                <Protected>
-                  <Projects />
-                </Protected>
-              }
-            />
-            <Route
               path="/mesProjets"
               element={
                 <Protected>
-                  <Blog />
+                  <Projects />
                 </Protected>
               }
             />
@@ -100,26 +94,19 @@ function App() {
               }
             />
             <Route path="/bases" element={<Bases />} />
-
-            {/* <Route path="/auth" element={<Auth/>}/>
-        <Route path="/modal" element={<Modal/>}/>
-        <Route path="/sama" element={<Protected isLoggedIn={AuthService.CallIsAuth()}>
-          <Sama/>
-        </Protected>}/>
-        <Route path="/voie" element={<Protected isLoggedIn={AuthService.CallIsAuth()}>
-          <Voie/>
-        </Protected>} />
-        <Route path="/docs" element={<Protected isLoggedIn={AuthService.CallIsAuth()}>
-          <Documents/>
-        </Protected>}/>
-        <Route path="/info" element={<Protected isLoggedIn={AuthService.CallIsAuth()}>
-          <Info/>
-        </Protected>}/>
-        <Route path="/profile" element={<Protected isLoggedIn={AuthService.CallIsAuth()}>
-          <Profile/>
-        </Protected>}/>
-        <Route path="*" element={<NotFound/>}/> */}
           </Routes>
+          <ToastContainer
+            position="bottom-center"
+            autoClose={2500}
+            hideProgressBar={false}
+            newestOnTop={false}
+            closeOnClick
+            rtl={false}
+            pauseOnFocusLoss
+            draggable
+            pauseOnHover
+            theme="dark"
+          />
         </StructuresContextProvider>
       </UserContextProvider>
     </>

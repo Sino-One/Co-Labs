@@ -19,7 +19,6 @@ import AuthService from "../../Services/AuthService";
 
 const pages = [
   { name: "Structures", href: "/structures", current: false },
-  { name: "Appels à projets", href: "/projets", current: false },
   { name: "Mes projets", href: "/mesProjets", current: false },
 ];
 

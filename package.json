@@ -10,7 +10,7 @@
     "@googlemaps/react-wrapper": "^1.1.35",
     "@mui/icons-material": "^5.15.2",
     "@mui/joy": "^5.0.0-beta.24",
-    "@mui/material": "^5.15.6",
+    "@mui/material": "^5.15.7",
     "@react-google-maps/api": "^2.19.2",
     "@testing-library/jest-dom": "^5.16.5",
     "@testing-library/react": "^13.4.0",
@@ -23,6 +23,7 @@
     "react-router-dom": "^6.4.3",
     "react-scripts": "5.0.1",
     "react-toastify": "^9.1.3",
+    "rxjs": "^7.8.1",
     "use-places-autocomplete": "^4.0.1",
     "web-vitals": "^2.1.4"
   },
