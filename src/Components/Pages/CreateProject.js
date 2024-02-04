@@ -27,9 +27,9 @@ export const publicAccType = {
 
 export default function CreateProject() {
   const [visible, setVisible] = useState(true);
-  const [description, setDescription] = useState("Description de votre projet");
+  const [description, setDescription] = useState("");
   const [publicType, setPublicType] = useState(publicAccType.enfant);
-  const [projectName, setProjectName] = useState(null);
+  const [projectName, setProjectName] = useState("");
   const [tags, setTags] = useState({
     social: false,
     culturel: false,
@@ -46,6 +46,26 @@ export default function CreateProject() {
 
   const handleSubmit = async (event) => {
     event.preventDefault();
+    if (projectName === "") {
+      toast.error("Veuillez renseigner un nom de projet");
+      return;
+    }
+    if (description === "") {
+      toast.error("Veuillez renseigner une description pour le projet");
+      return;
+    }
+    if (
+      tags.social === false &&
+      tags.culturel === false &&
+      tags.sportif === false &&
+      tags.nature === false &&
+      tags.mediation === false &&
+      tags.animation === false &&
+      tags.sante === false
+    ) {
+      toast.error("Veuillez renseigner au moins un tag pour le projet");
+      return;
+    }
     const project = {
       idStructure: user.structure,
       projectName,

@@ -33,7 +33,6 @@ export default function UserPrefs() {
   const navigate = useNavigate();
 
   const prevUser = useLocation().state.user;
-  console.log(prevUser);
 
   async function handleSubmit(event) {
     event.preventDefault();
@@ -46,6 +45,24 @@ export default function UserPrefs() {
   }
 
   const handleSignUp = async (data) => {
+    if (
+      preferences.social === false &&
+      preferences.culturel === false &&
+      preferences.sportif === false &&
+      preferences.nature === false &&
+      preferences.mediation === false &&
+      preferences.animation === false &&
+      preferences.sante === false
+    ) {
+      toast.error(
+        "Vous n'avez pas sélectionné de préférences, vous pourrez toujours modifier cela plus tard !"
+      );
+    }
+    if (dispo === false) {
+      toast.error(
+        "Vous avez indiqué ne pas être disponible pour des projets, vous ne recevrez donc pas d'invitations aux projets, vous pourrez toujours modifier cela plus tard !"
+      );
+    }
     await AuthService.CallSignUp(data).then((user) => {
       setUser(user);
       navigate("/home");

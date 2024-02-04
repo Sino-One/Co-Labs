@@ -44,6 +44,10 @@ export default function Bases() {
   }, []);
 
   async function handleSubmit() {
+    if (profession === "" || structure === "") {
+      toast.error("Veuillez remplir tous les champs");
+      return;
+    }
     toast.info("C'est parfait ! Encore une dernière étape ");
     const user = {
       ...prevUser,

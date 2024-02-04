@@ -19,7 +19,28 @@ export default function SignUp() {
 
   async function handleSubmit(e) {
     e.preventDefault();
-    toast.info("Merci, on passe à la suite !");
+    if (
+      username === "" ||
+      email === "" ||
+      password === "" ||
+      passwordConfirm === ""
+    ) {
+      toast.error("Veuillez remplir tous les champs");
+      return;
+    }
+    if (!email.includes("@")) {
+      toast.error("L'adresse mail n'est pas valide");
+      return;
+    }
+    if (password !== passwordConfirm) {
+      toast.error("Les mots de passe ne correspondent pas");
+      return;
+    }
+    // if (password.length < 6) {
+    //   toast.error("Le mot de passe doit contenir au moins 6 caractères");
+    //   return;
+    // }
+    toast.info("Super, on passe à la suite !");
     const user = {
       email,
       password,

@@ -13,6 +13,7 @@ import AdressSearchBar from "../../Atoms/AdressSearchBar";
 import { Select } from "@mui/material";
 import MenuItem from "@mui/material/MenuItem";
 import { publicAccType } from "../../Pages/CreateProject";
+import { toast } from "react-toastify";
 
 export default function CreationStructure() {
   const [nomStructure, setNomStructure] = useState("");
@@ -29,6 +30,35 @@ export default function CreationStructure() {
 
   async function handleSubmit(event) {
     event.preventDefault();
+    if (nomStructure === "") {
+      toast.error("Veuillez renseigner un nom de structure");
+      return;
+    }
+    if (adresseStructure === "") {
+      toast.error(
+        "Veuillez renseigner et selectionner une adresse de structure"
+      );
+      setError(true);
+      return;
+    }
+    if (tailleStructure === "") {
+      toast.error(
+        "Veuillez renseigner le nombre de professionnel dans la structure"
+      );
+      return;
+    }
+    if (typeStructure === "") {
+      toast.error("Veuillez renseigner le type de la structure");
+      return;
+    }
+    if (secteurStructure === "") {
+      toast.error("Veuillez renseigner le secteur d'activité de la structure");
+      return;
+    }
+    if (publicAcc === "") {
+      toast.error("Veuillez renseigner le public accueilli par la structure");
+      return;
+    }
     if (isDone && adresseStructure != "") {
       const { data } = await Api.post("creationStructure", {
         nom: nomStructure,
@@ -128,7 +158,7 @@ export default function CreationStructure() {
                     Public accueillis
                   </Typography>
                   <Select
-                    style={{ width: "300px" }}
+                    style={{ width: "90%" }}
                     labelId="demo-simple-select-label"
                     id="demo-simple-select"
                     value={publicAcc}
