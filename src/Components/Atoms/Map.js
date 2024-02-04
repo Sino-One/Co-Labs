@@ -15,6 +15,7 @@ import { StructuresContext } from "../../store/StructuresReducer";
 import { Typography } from "@mui/material";
 import ButtonGroup from "@mui/material/ButtonGroup";
 import Button from "@mui/material/Button";
+import { publicAccType } from "../Pages/CreateProject";
 
 const inputStyle = {
   boxSizing: `border-box`,
@@ -75,8 +76,8 @@ export default function Map() {
   const { structures } = useContext(StructuresContext);
   const [selectedCenter, setSelectedCenter] = useState(null);
   const [secteurStructure, setSecteurStructure] = useState("Social");
-  const [typeStructure, setTypeStructure] = useState("TODO");
   const [filter, setFilter] = useState("structure");
+  const [publicAcc, setPublicAcc] = useState(publicAccType.enfant);
 
   useEffect(() => {
     let newMarkers = [];
@@ -178,24 +179,6 @@ export default function Map() {
         </div>
         <div style={{ display: "block" }}>
           <Typography variant="body1" component="div">
-            Type de la structure
-          </Typography>
-          <Select
-            style={{ margin: 24, width: "90%" }}
-            labelId="demo-simple-select-label"
-            id="demo-simple-select"
-            value={typeStructure}
-            label="Type de structure"
-            onChange={(e) => setTypeStructure(e.target.value)}
-          >
-            {/* TODO */}
-            <MenuItem value={"TODO"}>TODO</MenuItem>
-            <MenuItem value={"Medico-social"}>TODO</MenuItem>
-            <MenuItem value={"Mixte"}>TODO</MenuItem>
-          </Select>
-        </div>
-        <div style={{ display: "block" }}>
-          <Typography variant="body1" component="div">
             Secteur d'activité
           </Typography>
           <Select
@@ -216,15 +199,18 @@ export default function Map() {
             Public accueillis
           </Typography>
           <Select
+            style={{ width: "300px" }}
             labelId="demo-simple-select-label"
             id="demo-simple-select"
-            value={10}
+            value={publicAcc}
             label="Public accueillis"
-            onChange={() => {}}
+            onChange={(e) => setPublicAcc(e.target.value)}
           >
-            <MenuItem value={10}>Ten</MenuItem>
-            <MenuItem value={20}>Twenty</MenuItem>
-            <MenuItem value={30}>Thirty</MenuItem>
+            {Object.keys(publicAccType).map((key) => (
+              <MenuItem value={publicAccType[key]} key={key}>
+                {publicAccType[key]}
+              </MenuItem>
+            ))}
           </Select>
         </div>
       </div>

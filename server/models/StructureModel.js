@@ -21,6 +21,10 @@ const StructureSchema = new mongoose.Schema({
     type: String,
     required: [true, "Your secteur is required"],
   },
+  public: {
+    type: String,
+    required: [true, "Your public is required"],
+  },
   projets: {
     type: Array,
     default: [],

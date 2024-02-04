@@ -1,11 +1,11 @@
-import React, { useState, useReducer } from "react";
-import { Divider, Select, TextField } from "@mui/material";
+import React, { useState } from "react";
+import { TextField, Select } from "@mui/material";
 import CardContent from "@mui/material/CardContent";
 import Typography from "@mui/material/Typography";
 import Button from "@mui/material/Button";
 import Box from "@mui/material/Box";
 import Card from "@mui/material/Card";
-import { Form, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import MenuItem from "@mui/material/MenuItem";
 import ButtonGroup from "@mui/material/ButtonGroup";
 import FormGroup from "@mui/material/FormGroup";
@@ -17,10 +17,17 @@ import StructureService from "../../Services/StructureService";
 import { StructuresContext } from "../../store/StructuresReducer";
 import { UserContext } from "../../store/UserReducer";
 
+export const publicAccType = {
+  enfant: "Enfant",
+  adulte: "Adulte",
+  enfantH: "Enfant en situation de handicap",
+  adulteH: "Adulte en situation de handicap",
+};
+
 export default function CreateProject() {
   const [visible, setVisible] = useState(true);
   const [description, setDescription] = useState("Description de votre projet");
-  const [publicType, setPublicType] = useState("Enfant");
+  const [publicType, setPublicType] = useState(publicAccType.enfant);
   const [projectName, setProjectName] = useState(null);
   const [tags, setTags] = useState({
     social: false,
@@ -95,14 +102,11 @@ export default function CreateProject() {
                         label="A qui s'adresse votre projet ?"
                         onChange={(e) => setPublicType(e.target.value)}
                       >
-                        <MenuItem value={"Enfant"}>Enfant</MenuItem>
-                        <MenuItem value={"Adulte"}>Adulte</MenuItem>
-                        <MenuItem value={"EnfantH"}>
-                          Enfant en situation de handicap
-                        </MenuItem>
-                        <MenuItem value={"AdulteH"}>
-                          Adulte en situation de handicap
-                        </MenuItem>
+                        {Object.keys(publicAccType).map((key) => (
+                          <MenuItem value={publicAccType[key]} key={key}>
+                            {publicAccType[key]}
+                          </MenuItem>
+                        ))}
                       </Select>
                     </FormGroup>
                     <FormGroup>

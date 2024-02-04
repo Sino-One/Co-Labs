@@ -12,6 +12,7 @@ import { getGeocode } from "../../../Utils/GeoCode";
 import AdressSearchBar from "../../Atoms/AdressSearchBar";
 import { Select } from "@mui/material";
 import MenuItem from "@mui/material/MenuItem";
+import { publicAccType } from "../../Pages/CreateProject";
 
 export default function CreationStructure() {
   const [nomStructure, setNomStructure] = useState("");
@@ -22,6 +23,7 @@ export default function CreationStructure() {
   const [adressResult, setAdressResult] = useState("");
   const [isDone, setIsDone] = useState(false);
   const [error, setError] = useState(false);
+  const [publicAcc, setPublicAcc] = useState(publicAccType.enfant);
 
   const navigate = useNavigate();
 
@@ -34,6 +36,7 @@ export default function CreationStructure() {
         adresse: adresseStructure,
         effectif: tailleStructure,
         secteur: secteurStructure,
+        publicAcc,
       });
       const { success, message } = data;
       console.log(success, data);
@@ -120,6 +123,23 @@ export default function CreationStructure() {
                     <MenuItem value={"Social"}>Social</MenuItem>
                     <MenuItem value={"Medico-social"}>Médico-social</MenuItem>
                     <MenuItem value={"Mixte"}>Mixte</MenuItem>
+                  </Select>
+                  <Typography variant="body1" component="div">
+                    Public accueillis
+                  </Typography>
+                  <Select
+                    style={{ width: "300px" }}
+                    labelId="demo-simple-select-label"
+                    id="demo-simple-select"
+                    value={publicAcc}
+                    label="Public accueillis"
+                    onChange={(e) => setPublicAcc(e.target.value)}
+                  >
+                    {Object.keys(publicAccType).map((key) => (
+                      <MenuItem value={publicAccType[key]} key={key}>
+                        {publicAccType[key]}
+                      </MenuItem>
+                    ))}
                   </Select>
                   <Button
                     variant="contained"

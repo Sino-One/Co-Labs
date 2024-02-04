@@ -85,7 +85,7 @@ export default function Bases() {
                     label="Secteur d'activité"
                     onChange={(e) => setProfession(e.target.value)}
                   >
-                    {Object.keys(professionType).map((key, value) => (
+                    {Object.keys(professionType).map((key) => (
                       <MenuItem value={professionType[key]} key={key}>
                         {professionType[key]}
                       </MenuItem>
