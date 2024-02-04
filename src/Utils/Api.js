@@ -1,4 +1,5 @@
 import axios from "axios";
+import { toast } from "react-toastify";
 
 const config = {
   withCredentials: true,
@@ -11,7 +12,7 @@ export const get = async (url) => {
     });
     return data;
   } catch (error) {
-    console.log(error);
+    toast.error(error.response.data.message);
   }
 };
 
@@ -22,6 +23,6 @@ export const post = async (url, body) => {
     });
     return data;
   } catch (error) {
-    console.log(error);
+    toast.error(error.response.data.message);
   }
 };

@@ -8,7 +8,6 @@ export default function Annuaire({ data }) {
   return (
     <>
       <div className="annuaire">
-        <h2>Annuaire</h2>
         <div className="annuaire__list">
           {data.map((item, index) => {
             return (

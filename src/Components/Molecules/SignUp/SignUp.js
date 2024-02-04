@@ -7,6 +7,7 @@ import Box from "@mui/material/Box";
 import Card from "@mui/material/Card";
 import { useNavigate } from "react-router-dom";
 import { useState } from "react";
+import { toast } from "react-toastify";
 
 export default function SignUp() {
   const navigate = useNavigate();
@@ -18,6 +19,7 @@ export default function SignUp() {
 
   async function handleSubmit(e) {
     e.preventDefault();
+    toast.info("Merci, on passe à la suite !");
     const user = {
       email,
       password,

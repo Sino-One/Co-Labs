@@ -1,4 +1,5 @@
 import * as Api from "../Utils/Api";
+import { toast } from "react-toastify";
 
 const handleSignUp = async (forms) => {
   try {

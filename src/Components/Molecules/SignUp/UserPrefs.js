@@ -14,6 +14,8 @@ import { useState } from "react";
 import AuthService from "../../../Services/AuthService";
 import { useContext } from "react";
 import { UserContext } from "../../../store/UserReducer";
+import { toast } from "react-toastify";
+
 export default function UserPrefs() {
   const { setUser } = useContext(UserContext);
   const [dispo, setDispo] = useState(true);
@@ -35,7 +37,6 @@ export default function UserPrefs() {
 
   async function handleSubmit(event) {
     event.preventDefault();
-    // navigate("/");
     const user = {
       ...prevUser,
       availability: dispo,
@@ -48,6 +49,7 @@ export default function UserPrefs() {
     await AuthService.CallSignUp(data).then((user) => {
       setUser(user);
       navigate("/home");
+      toast.success("Compte créé avec succès ! Bienvenue sur la plateforme !");
     });
   };
 

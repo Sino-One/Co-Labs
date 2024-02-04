@@ -10,6 +10,7 @@ import { useState } from "react";
 import SearchBar from "../../Atoms/SearchBar";
 import * as Api from "../../../Utils/Api";
 import { MenuItem, Select } from "@mui/material";
+import { toast } from "react-toastify";
 
 export const professionType = {
   educSpe: "Educateur spécialisé",
@@ -43,6 +44,7 @@ export default function Bases() {
   }, []);
 
   async function handleSubmit() {
+    toast.info("C'est parfait ! Encore une dernière étape ");
     const user = {
       ...prevUser,
       profession,

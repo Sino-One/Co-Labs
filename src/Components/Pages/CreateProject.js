@@ -16,6 +16,7 @@ import { useContext } from "react";
 import StructureService from "../../Services/StructureService";
 import { StructuresContext } from "../../store/StructuresReducer";
 import { UserContext } from "../../store/UserReducer";
+import { toast } from "react-toastify";
 
 export const publicAccType = {
   enfant: "Enfant",
@@ -58,6 +59,7 @@ export default function CreateProject() {
     StructureService.addProject(project).then((data) => {
       if (data) {
         addProjectToStructure(data.structure);
+        toast.success("Projet ajouté avec succès");
         navigate("/mesProjets");
       }
     });

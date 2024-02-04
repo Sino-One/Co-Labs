@@ -11,6 +11,7 @@ import { useState } from "react";
 import AuthService from "../../../Services/AuthService";
 import { useContext } from "react";
 import { UserContext } from "../../../store/UserReducer";
+import { toast } from "react-toastify";
 
 export default function SignIn() {
   const [email, setEmail] = useState("");
@@ -24,6 +25,7 @@ export default function SignIn() {
     e.preventDefault();
     await AuthService.CallSignIn(data).then((data) => {
       setUser(data.user);
+      toast.success("Connexion réussie !");
       navigate("/home");
     });
   };
