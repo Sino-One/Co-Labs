@@ -85,14 +85,18 @@ export default function Map() {
       structures.map((structure) =>
         fromAddress(structure.adresse).then((response) => {
           const { lat, lng } = response.results[0].geometry.location;
-          newMarkers.push({ ...structure, lat: lat, lng: lng });
+          if (filter === "structure") {
+            newMarkers.push({ ...structure, lat: lat, lng: lng });
+          } else if (filter === "projet") {
+            if (structure?.projets?.length > 0) {
+              newMarkers.push({ ...structure, lat: lat, lng: lng });
+            }
+          }
           setMarkers(newMarkers);
         })
       );
     }
-  }, [structures]);
-
-  console.log(structures);
+  }, [structures, filter]);
 
   useEffect(() => {
     if (markers.length > 0) {
@@ -101,7 +105,6 @@ export default function Map() {
         lng: markers[0].lng,
       });
     }
-    console.log(markers);
   }, [markers]);
 
   useEffect(() => {
@@ -118,10 +121,8 @@ export default function Map() {
         setFilteredMarkers(filtered);
       }, 100);
     }
-    if (markers) {
-      fetchFilteredMarkers();
-    }
-  }, [center, radius, markers]);
+    fetchFilteredMarkers(markers);
+  }, [center, radius, markers, filter]);
 
   if (loadError) {
     return <div>Error loading maps</div>;
