@@ -2,7 +2,7 @@ const Structure = require("../models/StructureModel");
 
 module.exports.CreationStructure = async (req, res, next) => {
   try {
-    const { nom, type, adresse, effectif, secteur, structureType } = req.body;
+    const { nom, type, adresse, effectif, secteur } = req.body;
     const existingStructure = await Structure.findOne({ nom });
     if (existingStructure) {
       return res.json({ message: "Structure already exists" });
@@ -13,7 +13,6 @@ module.exports.CreationStructure = async (req, res, next) => {
       adresse,
       effectif,
       secteur,
-      structureType,
       createdAt: new Date(),
     });
 

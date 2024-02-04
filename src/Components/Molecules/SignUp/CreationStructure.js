@@ -18,11 +18,10 @@ export default function CreationStructure() {
   const [adresseStructure, setAdresseStructure] = useState("");
   const [tailleStructure, setTailleStructure] = useState("");
   const [secteurStructure, setSecteurStructure] = useState("Social");
-  const [typeStructure, setTypeStructure] = useState("TODO");
+  const [typeStructure, setTypeStructure] = useState("");
   const [adressResult, setAdressResult] = useState("");
   const [isDone, setIsDone] = useState(false);
   const [error, setError] = useState(false);
-  const [structureType, setStructureType] = useState("Social");
 
   const navigate = useNavigate();
 
@@ -35,7 +34,6 @@ export default function CreationStructure() {
         adresse: adresseStructure,
         effectif: tailleStructure,
         secteur: secteurStructure,
-        structureType: structureType,
       });
       const { success, message } = data;
       console.log(success, data);
@@ -99,6 +97,16 @@ export default function CreationStructure() {
                     onChange={(e) => setTailleStructure(e.target.value)}
                   />
                   <Typography variant="body1" component="div">
+                    Type de la structure
+                  </Typography>
+                  <TextField
+                    id="tailleStructure"
+                    label="Type de la structure"
+                    variant="outlined"
+                    style={{ margin: 24, width: "90%" }}
+                    onChange={(e) => setTypeStructure(e.target.value)}
+                  />
+                  <Typography variant="body1" component="div">
                     Secteur d'activité
                   </Typography>
                   <Select
@@ -112,22 +120,6 @@ export default function CreationStructure() {
                     <MenuItem value={"Social"}>Social</MenuItem>
                     <MenuItem value={"Medico-social"}>Médico-social</MenuItem>
                     <MenuItem value={"Mixte"}>Mixte</MenuItem>
-                  </Select>
-                  <Typography variant="body1" component="div">
-                    Type de la structure
-                  </Typography>
-                  <Select
-                    style={{ margin: 24, width: "90%" }}
-                    labelId="demo-simple-select-label"
-                    id="demo-simple-select"
-                    value={typeStructure}
-                    label="Type de structure"
-                    onChange={(e) => setTypeStructure(e.target.value)}
-                  >
-                    {/* TODO */}
-                    <MenuItem value={"TODO"}>TODO</MenuItem>
-                    <MenuItem value={"Medico-social"}>TODO</MenuItem>
-                    <MenuItem value={"Mixte"}>TODO</MenuItem>
                   </Select>
                   <Button
                     variant="contained"

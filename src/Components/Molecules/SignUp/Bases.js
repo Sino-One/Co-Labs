@@ -9,12 +9,24 @@ import { useNavigate, useLocation } from "react-router-dom";
 import { useState } from "react";
 import SearchBar from "../../Atoms/SearchBar";
 import * as Api from "../../../Utils/Api";
+import { MenuItem, Select } from "@mui/material";
+
+export const professionType = {
+  educSpe: "Educateur spécialisé",
+  educRue: "Educateur de rue",
+  moniteur: "Moniteur éducateur",
+  maitreMaison: "Maître / Maîtress de maison",
+  chefService: "Chef de service",
+  directeur: "Directeur",
+  infirmiere: "Infirmière",
+  animateur: "Animateur",
+};
 
 export default function Bases() {
   const navigate = useNavigate();
   const prevUser = useLocation().state.user;
 
-  const [profession, setProfession] = useState("");
+  const [profession, setProfession] = useState(professionType.educSpe);
   const [structure, setStructure] = useState("");
   const [structures, setStructures] = useState([]);
 
@@ -40,6 +52,10 @@ export default function Bases() {
     navigate("/userPrefs", { state: { user } });
   }
 
+  Object.keys(professionType).map((key, value) =>
+    console.log(key, professionType[key])
+  );
+
   function handleCreateStructure() {
     navigate("/creationStructure");
   }
@@ -54,13 +70,27 @@ export default function Bases() {
                   Inscription
                 </Typography>
                 <form>
-                  <TextField
-                    id="profession"
-                    label="Quelle est votre profession ?"
-                    variant="outlined"
+                  <Typography
+                    variant="body1"
+                    component="div"
                     style={{ margin: 24, width: "90%" }}
+                  >
+                    Quelle est votre profession ?
+                  </Typography>
+                  <Select
+                    style={{ width: "90%" }}
+                    labelId="demo-simple-select-label"
+                    id="demo-simple-select"
+                    value={profession}
+                    label="Secteur d'activité"
                     onChange={(e) => setProfession(e.target.value)}
-                  />
+                  >
+                    {Object.keys(professionType).map((key, value) => (
+                      <MenuItem value={professionType[key]} key={key}>
+                        {professionType[key]}
+                      </MenuItem>
+                    ))}
+                  </Select>
                   <div style={{ display: "flex" }}>
                     <SearchBar
                       placeholder={"Nom de votre structure"}
