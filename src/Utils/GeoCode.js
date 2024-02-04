@@ -19,7 +19,6 @@ setLanguage("fr"); // Default language for responses.
 setRegion("fr"); // Default region for responses.
 
 export const getGeocode = (type, value) => {
-  console.log(type, value);
   switch (type) {
     case "address":
       return geocode(RequestType.ADDRESS, value);

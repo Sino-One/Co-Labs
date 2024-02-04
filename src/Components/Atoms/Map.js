@@ -16,6 +16,7 @@ import { Typography } from "@mui/material";
 import ButtonGroup from "@mui/material/ButtonGroup";
 import Button from "@mui/material/Button";
 import { publicAccType } from "../Pages/CreateProject";
+import { UserContext } from "../../store/UserReducer";
 
 const inputStyle = {
   boxSizing: `border-box`,
@@ -74,6 +75,8 @@ export default function Map() {
   const [center, setCenter] = useState({ lat: 0, lng: 0 }); // Le point central
   const [radius, setRadius] = useState(30); // Le rayon de recherche
   const { structures } = useContext(StructuresContext);
+  const { user } = useContext(UserContext);
+  const [userStructure, setUserStructure] = useState(null); // La structure de l'utilisateur
   const [selectedCenter, setSelectedCenter] = useState(null);
   const [secteurStructure, setSecteurStructure] = useState("Social");
   const [filter, setFilter] = useState("structure");
@@ -86,6 +89,8 @@ export default function Map() {
         fromAddress(structure.adresse).then((response) => {
           const { lat, lng } = response.results[0].geometry.location;
           if (filter === "structure") {
+            if (structure._id === user.structure)
+              setUserStructure({ ...structure, lat: lat, lng: lng });
             newMarkers.push({ ...structure, lat: lat, lng: lng });
           } else if (filter === "projet") {
             if (structure?.projets?.length > 0) {
@@ -101,28 +106,41 @@ export default function Map() {
   useEffect(() => {
     if (markers.length > 0) {
       setCenter({
-        lat: markers[0].lat,
-        lng: markers[0].lng,
+        lat: userStructure.lat,
+        lng: userStructure.lng,
       });
     }
-  }, [markers]);
+  }, [userStructure]);
 
   useEffect(() => {
     // Filtrer les marqueurs par distance
     async function fetchFilteredMarkers() {
       await setTimeout(() => {
-        const filtered = markers.filter((structure) => {
+        let filtered = markers.filter((structure) => {
           const distance = calculateDistance(center, {
             lat: structure.lat,
             lng: structure.lng,
           });
           return distance <= radius;
         });
+        filtered = filtered.filter((structure) => {
+          if (
+            structure.secteur === secteurStructure ||
+            secteurStructure === "Mixte"
+          ) {
+            return structure;
+          }
+        });
+        filtered = filtered.filter((structure) => {
+          if (structure.public === publicAcc) {
+            return structure;
+          }
+        });
         setFilteredMarkers(filtered);
       }, 100);
     }
     fetchFilteredMarkers(markers);
-  }, [center, radius, markers, filter]);
+  }, [center, radius, markers, filter, secteurStructure, publicAcc]);
 
   if (loadError) {
     return <div>Error loading maps</div>;

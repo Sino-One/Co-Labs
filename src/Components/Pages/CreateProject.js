@@ -75,7 +75,6 @@ export default function CreateProject() {
       tags,
       user,
     };
-    console.log(user);
     StructureService.addProject(project).then((data) => {
       if (data) {
         addProjectToStructure(data.structure);
@@ -83,7 +82,6 @@ export default function CreateProject() {
         navigate("/mesProjets");
       }
     });
-    console.log(structures);
   };
 
   return (
