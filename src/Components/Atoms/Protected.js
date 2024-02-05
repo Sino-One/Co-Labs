@@ -4,7 +4,6 @@ import { UserContext } from "../../store/UserReducer";
 
 function Protected({ children }) {
   const { user } = useContext(UserContext);
-  console.log(user);
   if (!user) {
     return <Navigate to="/" replace />;
   }

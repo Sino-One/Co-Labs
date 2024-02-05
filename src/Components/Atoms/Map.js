@@ -10,13 +10,15 @@ import { fromAddress } from "react-geocode";
 import Slider from "@mui/material/Slider";
 import MenuItem from "@mui/material/MenuItem";
 import Select from "@mui/material/Select";
-import Annuaire from "./Annuaire";
+import Annuaire from "./AnnuaireStructure";
 import { StructuresContext } from "../../store/StructuresReducer";
 import { Typography } from "@mui/material";
 import ButtonGroup from "@mui/material/ButtonGroup";
 import Button from "@mui/material/Button";
 import { publicAccType } from "../Pages/CreateProject";
 import { UserContext } from "../../store/UserReducer";
+import AnnuaireStructure from "./AnnuaireStructure";
+import AnnuaireProjet from "./AnnuaireProjet";
 
 const inputStyle = {
   boxSizing: `border-box`,
@@ -269,7 +271,11 @@ export default function Map() {
           </InfoWindow>
         )}
       </GoogleMap>
-      <Annuaire data={filteredMarkers} />
+      {filter === "structure" || filter === "projet" ? (
+        <AnnuaireStructure data={filteredMarkers} />
+      ) : (
+        <AnnuaireProjet></AnnuaireProjet>
+      )}
     </div>
   );
 }
