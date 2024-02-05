@@ -15,6 +15,7 @@ export default function Projects() {
   const { user, setUser } = useContext(UserContext);
   const { structures, setStructures } = useContext(StructuresContext);
   const [userProjects, setUserProjects] = useState([]);
+  const [userStructure, setUserStructure] = useState({});
 
   useEffect(() => {
     if (user && structures) {
@@ -22,6 +23,7 @@ export default function Projects() {
       const userStructure = structures.find(
         (structure) => structure._id === user.structure
       );
+      setUserStructure(userStructure);
       userStructure?.projets.map((projet) => {
         if (projet.user._id === user._id) {
           setUserProjects((userProjects) => [...userProjects, projet]);
@@ -35,6 +37,35 @@ export default function Projects() {
   return (
     <>
       <h1>Mes projets</h1>
+      <Grid
+        container
+        spacing={12}
+        columnSpacing={{ sm: 2, md: 3 }}
+        style={{ justifyContent: "center", margin: "0 -24px" }}
+      >
+        {userProjects.map((projet, index) => (
+          <Grid key={index} style={{ margin: "30px" }}>
+            <Card
+              sx={{ maxWidth: 345 }}
+              onClick={() =>
+                navigate("/projetDetails", { state: { projet, userStructure } })
+              }
+            >
+              <CardActionArea>
+                <CardContent>
+                  <Typography gutterBottom variant="h5" component="div">
+                    {projet.projectName}
+                  </Typography>
+                  <Typography variant="body2" color="text.secondary">
+                    {projet.description}
+                  </Typography>
+                </CardContent>
+              </CardActionArea>
+            </Card>
+          </Grid>
+        ))}
+      </Grid>
+      <h1>Les projets que j'ai rejoins</h1>
       <Grid
         container
         spacing={12}

@@ -23,6 +23,7 @@ import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import Profil from "./Components/Pages/Profil";
 import * as Api from "./Utils/Api";
+import ProjetDetails from "./Components/Pages/ProjetDetails";
 
 function App() {
   const { user, setUser } = useContext(UserContext);
@@ -104,6 +105,14 @@ function App() {
               element={
                 <Protected>
                   <Profil />
+                </Protected>
+              }
+            />
+            <Route
+              path="/projetDetails"
+              element={
+                <Protected>
+                  <ProjetDetails />
                 </Protected>
               }
             />
