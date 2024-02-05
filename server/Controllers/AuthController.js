@@ -170,3 +170,98 @@ module.exports.isLoggedIn = CatchAsync(async (req, res, next) => {
     next(error); // Pass the error to the error handling middleware
   }
 });
+
+module.exports.UpdateUser = CatchAsync(async (req, res, next) => {
+  try {
+    const {
+      id,
+      username,
+      email,
+      password,
+      confirmPassword,
+      preferences,
+      availability,
+      profession,
+    } = req.body;
+
+    if (username) {
+      User.updateOne({ _id: id }, { username })
+        .then((obj) => {
+          res.status(200).json({ message: "Utilisateur modifié" });
+          next();
+        })
+        .catch((err) => {
+          console.log("Error: " + err);
+        });
+    }
+    if (email) {
+      User.updateOne({ _id: id }, { email })
+        .then((obj) => {
+          res.status(200).json({ message: "Utilisateur modifié" });
+          next();
+        })
+        .catch((err) => {
+          console.log("Error: " + err);
+        });
+    }
+    if (password && password === confirmPassword) {
+      User.updateOne({ _id: id }, { password, confirmPassword })
+        .then((obj) => {
+          res.status(200).json({ message: "Utilisateur modifié" });
+          next();
+        })
+        .catch((err) => {
+          console.log("Error: " + err);
+        });
+    }
+    if (preferences) {
+      User.updateOne({ _id: id }, { preferences })
+        .then((obj) => {
+          res.status(200).json({ message: "Utilisateur modifié" });
+          next();
+        })
+        .catch((err) => {
+          console.log("Error: " + err);
+        });
+    }
+    if (availability != undefined) {
+      console.log("availability", availability);
+      User.updateOne({ _id: id }, { availability })
+        .then((obj) => {
+          res.status(200).json({ message: "Utilisateur modifié" });
+          next();
+        })
+        .catch((err) => {
+          console.log("Error: " + err);
+        });
+    }
+    if (profession) {
+      User.updateOne(
+        { _id: id },
+        {
+          profession,
+        }
+      )
+        .then((obj) => {
+          res.status(200).json({ message: "Utilisateur modifié" });
+          next();
+        })
+        .catch((err) => {
+          console.log("Error: " + err);
+        });
+    }
+  } catch (error) {
+    console.error(error);
+  }
+});
+
+module.exports.GetUser = CatchAsync(async (req, res, next) => {
+  try {
+    const { id } = req.body;
+    const user = await User.findById(id);
+    res.status(200).json({ user });
+    next();
+  } catch (error) {
+    console.error(error);
+  }
+});

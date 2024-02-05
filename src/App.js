@@ -21,17 +21,26 @@ import Map from "./Components/Atoms/Map";
 import Structure from "./Components/Pages/Structure";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import Profil from "./Components/Pages/Profil";
+import * as Api from "./Utils/Api";
 
 function App() {
   const { user, setUser } = useContext(UserContext);
   const { setStructures } = useContext(StructuresContext);
-  const notify = () => toast("Wow so easy !");
 
   useEffect(() => {
     if (user) {
       fetchStructures();
     }
   }, [user]);
+
+  const fetchUser = () => {
+    if (user) {
+      Api.post("getUser", { id: user._id }).then((res) => {
+        setUser(res.data);
+      });
+    }
+  };
 
   const fetchStructures = async () => {
     await StructureService.getAllStructures().then((structures) => {
@@ -87,6 +96,14 @@ function App() {
               element={
                 <Protected>
                   <CreateProject />
+                </Protected>
+              }
+            />
+            <Route
+              path="/profil"
+              element={
+                <Protected>
+                  <Profil />
                 </Protected>
               }
             />

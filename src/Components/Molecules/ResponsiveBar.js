@@ -69,7 +69,8 @@ function ResponsiveAppBar() {
       logOut();
       return;
     }
-    if (route === "/SignIn" || route === "/SignUp") navigate(route);
+    if (route === "/SignIn" || route === "/SignUp" || route === "/profil")
+      navigate(route);
   };
 
   const redirect = (page) => {
