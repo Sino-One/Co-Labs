@@ -258,8 +258,13 @@ module.exports.UpdateUser = CatchAsync(async (req, res, next) => {
 module.exports.GetUser = CatchAsync(async (req, res, next) => {
   try {
     const { id } = req.body;
-    const user = await User.findById(id);
-    res.status(200).json({ user });
+    await User.findById(id)
+      .then((user) => {
+        res.status(200).json({ user });
+      })
+      .catch((err) => {
+        console.log("Error: " + err);
+      });
     next();
   } catch (error) {
     console.error(error);

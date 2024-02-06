@@ -8,15 +8,6 @@ import StructureService from "../../Services/StructureService";
 export default function Home() {
   const { setStructures } = useContext(StructuresContext);
 
-  useEffect(() => {
-    async function fetchStructures() {
-      await StructureService.getAllStructures().then((structures) => {
-        setStructures(structures);
-      });
-    }
-    fetchStructures();
-  }, []);
-
   return (
     <>
       <Grid

@@ -40,7 +40,13 @@ export default function Structure() {
           <Card
             sx={{ maxWidth: 345 }}
             onClick={() =>
-              navigate("/projetDetails", { state: { projet, userStructure } })
+              navigate("/projetDetails", {
+                state: {
+                  projet,
+                  userStructure,
+                  projectStructure: structure,
+                },
+              })
             }
           >
             <CardActionArea>

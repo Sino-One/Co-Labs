@@ -19,6 +19,7 @@ import { publicAccType } from "../Pages/CreateProject";
 import { UserContext } from "../../store/UserReducer";
 import AnnuaireStructure from "./AnnuaireStructure";
 import AnnuaireProjet from "./AnnuaireProjet";
+import StructureService from "../../Services/StructureService";
 
 const inputStyle = {
   boxSizing: `border-box`,
@@ -64,7 +65,7 @@ const libraries = ["places"];
 
 export default function Map() {
   const mapContainerStyle = {
-    width: "100vw",
+    width: "90vw",
     height: "50vh",
     marginTop: "24px",
   };
@@ -76,13 +77,22 @@ export default function Map() {
   const [filteredMarkers, setFilteredMarkers] = useState([]); // Les marqueurs filtrés
   const [center, setCenter] = useState({ lat: 0, lng: 0 }); // Le point central
   const [radius, setRadius] = useState(30); // Le rayon de recherche
-  const { structures } = useContext(StructuresContext);
+  const { structures, setStructures } = useContext(StructuresContext);
   const { user } = useContext(UserContext);
   const [userStructure, setUserStructure] = useState(null); // La structure de l'utilisateur
   const [selectedCenter, setSelectedCenter] = useState(null);
-  const [secteurStructure, setSecteurStructure] = useState("Social");
+  const [secteurStructure, setSecteurStructure] = useState("Mixte");
   const [filter, setFilter] = useState("structure");
   const [publicAcc, setPublicAcc] = useState(publicAccType.enfant);
+
+  useEffect(() => {
+    async function fetchStructures() {
+      await StructureService.getAllStructures().then((structures) => {
+        setStructures(structures);
+      });
+    }
+    fetchStructures();
+  }, []);
 
   useEffect(() => {
     let newMarkers = [];
@@ -203,7 +213,7 @@ export default function Map() {
             Secteur d'activité
           </Typography>
           <Select
-            style={{ margin: 24, width: "180px" }}
+            style={{ width: "150px", marginRight: "24px" }}
             labelId="demo-simple-select-label"
             id="demo-simple-select"
             value={secteurStructure}
@@ -235,42 +245,45 @@ export default function Map() {
           </Select>
         </div>
       </div>
-      <GoogleMap
-        mapContainerStyle={mapContainerStyle}
-        zoom={10}
-        center={center}
-      >
-        <StandaloneSearchBox onPlacesChanged={(e) => console.log(e)}>
-          <input
-            type="text"
-            placeholder="Rechercher une structure"
-            style={inputStyle}
-            onChange={(e) => console.log(e)}
-          />
-        </StandaloneSearchBox>
-        {filteredMarkers.map((marker) => (
-          <Marker
-            key={marker._id}
-            position={{ lat: marker.lat, lng: marker.lng }}
-            onClick={() => {
-              setSelectedCenter(marker);
-            }}
-          />
-        ))}
-        {selectedCenter && (
-          <InfoWindow
-            onCloseClick={() => {
-              setSelectedCenter(null);
-            }}
-            position={{ lat: selectedCenter.lat, lng: selectedCenter.lng }}
-          >
-            <div>
-              <h2>{selectedCenter.nom}</h2>
-              <p>{selectedCenter.adresse}</p>
-            </div>
-          </InfoWindow>
-        )}
-      </GoogleMap>
+      <center>
+        <GoogleMap
+          mapContainerStyle={mapContainerStyle}
+          zoom={10}
+          center={center}
+        >
+          <StandaloneSearchBox onPlacesChanged={(e) => console.log(e)}>
+            <input
+              type="text"
+              placeholder="Rechercher une structure"
+              style={inputStyle}
+              onChange={(e) => console.log(e)}
+            />
+          </StandaloneSearchBox>
+          {filteredMarkers.map((marker) => (
+            <Marker
+              key={marker._id}
+              position={{ lat: marker.lat, lng: marker.lng }}
+              onClick={() => {
+                setSelectedCenter(marker);
+              }}
+            />
+          ))}
+          {selectedCenter && (
+            <InfoWindow
+              onCloseClick={() => {
+                setSelectedCenter(null);
+              }}
+              position={{ lat: selectedCenter.lat, lng: selectedCenter.lng }}
+            >
+              <div>
+                <h2>{selectedCenter.nom}</h2>
+                <p>{selectedCenter.adresse}</p>
+              </div>
+            </InfoWindow>
+          )}
+        </GoogleMap>
+      </center>
+
       {filter === "structure" || filter === "projet" ? (
         <AnnuaireStructure data={filteredMarkers} />
       ) : (

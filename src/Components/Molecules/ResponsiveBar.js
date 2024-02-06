@@ -13,9 +13,11 @@ import Tooltip from "@mui/material/Tooltip";
 import MenuItem from "@mui/material/MenuItem";
 import AdbIcon from "@mui/icons-material/Adb";
 import { useLocation, useNavigate } from "react-router-dom";
-import { useContext } from "react";
+import { useContext, useEffect, useState } from "react";
 import { UserContext } from "../../store/UserReducer";
 import AuthService from "../../Services/AuthService";
+import { StructuresContext } from "../../store/StructuresReducer";
+import GroupAddRoundedIcon from "@mui/icons-material/GroupAddRounded";
 
 const pages = [
   { name: "Structures", href: "/structures", current: false },
@@ -33,8 +35,52 @@ function isCurrent(location, path) {
 function ResponsiveAppBar() {
   const [anchorElNav, setAnchorElNav] = React.useState(null);
   const [anchorElUser, setAnchorElUser] = React.useState(null);
+  const [anchorElInvitation, setAnchorElInvitation] = React.useState(null);
+  const [userStructure, setUserStructure] = useState({});
+  const [userProjects, setUserProjects] = useState([{}]);
+  const [waitingInvits, setWaitingInvits] = useState([]);
 
   const { user, setUser } = useContext(UserContext);
+  const { structures } = useContext(StructuresContext);
+
+  useEffect(() => {
+    if (user) {
+      const userStructure = structures.find(
+        (structure) => structure._id === user.structure
+      );
+      setUserStructure(userStructure);
+    }
+  }, [user, structures]);
+
+  useEffect(() => {
+    let projects = [];
+    if (userStructure && userStructure.projets) {
+      userStructure.projets.map((projet) => {
+        if (projet.user._id === user._id) {
+          projects.push(projet);
+        }
+      });
+      setUserProjects(projects);
+    }
+  }, [userStructure]);
+
+  useEffect(() => {
+    let invits = [];
+    if (userProjects && userProjects.length > 0) {
+      userProjects.map((projet) => {
+        if (projet.waitingMembers && projet.waitingMembers.length > 0) {
+          projet.waitingMembers.map((user) => {
+            invits.push({ user, projet });
+          });
+        }
+      });
+      setWaitingInvits(invits);
+    }
+  }, [userProjects]);
+
+  useEffect(() => {
+    console.log("waitingInvits", waitingInvits);
+  }, [waitingInvits]);
 
   const location = useLocation();
   const navigate = useNavigate();
@@ -44,6 +90,9 @@ function ResponsiveAppBar() {
   };
   const handleOpenUserMenu = (event) => {
     setAnchorElUser(event.currentTarget);
+  };
+  const handleOpenInvitationMenu = (event) => {
+    setAnchorElInvitation(event.currentTarget);
   };
 
   const handleCloseNavMenu = () => {
@@ -72,6 +121,16 @@ function ResponsiveAppBar() {
     if (route === "/SignIn" || route === "/SignUp" || route === "/profil")
       navigate(route);
   };
+  const handleCloseInvitationMenu = (route, user, projet) => {
+    setAnchorElInvitation(null);
+    navigate(route, {
+      state: {
+        projet,
+        user,
+        projectStructure: userStructure,
+      },
+    });
+  };
 
   const redirect = (page) => {
     navigate(page.href);
@@ -97,7 +156,7 @@ function ResponsiveAppBar() {
               variant="h6"
               noWrap
               component="a"
-              onClick={() => navigate("/home")}
+              onClick={() => navigate("/structures")}
               sx={{
                 mr: 2,
                 display: { xs: "none", md: "flex" },
@@ -111,7 +170,6 @@ function ResponsiveAppBar() {
             >
               LOGO
             </Typography>
-
             <Box sx={{ flexGrow: 1, display: { xs: "flex", md: "none" } }}>
               <IconButton
                 size="large"
@@ -153,7 +211,7 @@ function ResponsiveAppBar() {
               variant="h5"
               noWrap
               component="a"
-              onClick={() => navigate("/home")}
+              onClick={() => navigate("/structures")}
               sx={{
                 mr: 2,
                 display: { xs: "flex", md: "none" },
@@ -190,6 +248,67 @@ function ResponsiveAppBar() {
               ))}
             </Box>
 
+            {
+              // TODO Invitations Component
+              waitingInvits && waitingInvits.length > 0 && (
+                <Box sx={{ flexGrow: 0, mr: "24px" }}>
+                  <Tooltip title="Open invitations">
+                    <IconButton
+                      sx={{ p: 0 }}
+                      onClick={handleOpenInvitationMenu}
+                    >
+                      <GroupAddRoundedIcon />
+                      <div
+                        style={{
+                          fontSize: "small",
+                          marginBottom: "24px",
+                          color: "chartreuse",
+                        }}
+                      >
+                        {waitingInvits.length}
+                      </div>
+                    </IconButton>
+                  </Tooltip>
+                  <Menu
+                    sx={{ mt: "45px" }}
+                    id="menu-appbar"
+                    anchorEl={anchorElInvitation}
+                    anchorOrigin={{
+                      vertical: "top",
+                      horizontal: "right",
+                    }}
+                    keepMounted
+                    transformOrigin={{
+                      vertical: "top",
+                      horizontal: "right",
+                    }}
+                    open={Boolean(anchorElInvitation)}
+                    onClose={handleCloseInvitationMenu}
+                  >
+                    {waitingInvits.map((invit, index) => {
+                      return (
+                        invit && (
+                          <MenuItem
+                            key={index}
+                            onClick={() =>
+                              handleCloseInvitationMenu(
+                                "/projetDetails",
+                                invit.user,
+                                invit.projet
+                              )
+                            }
+                          >
+                            <Typography textAlign="center">
+                              {invit.projet.projectName}
+                            </Typography>
+                          </MenuItem>
+                        )
+                      );
+                    })}
+                  </Menu>
+                </Box>
+              )
+            }
             <Box sx={{ flexGrow: 0 }}>
               <Tooltip title="Open settings">
                 <IconButton sx={{ p: 0 }} onClick={handleOpenUserMenu}>

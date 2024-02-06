@@ -24,9 +24,13 @@ export default function SignIn() {
   const handleSignIn = async (e, data) => {
     e.preventDefault();
     await AuthService.CallSignIn(data).then((data) => {
-      setUser(data.user);
-      toast.success("Connexion réussie !");
-      navigate("/home");
+      if (data.user) {
+        setUser(data.user);
+        toast.success("Connexion réussie !");
+        navigate("/structures");
+      } else {
+        toast.error(data.message);
+      }
     });
   };
 

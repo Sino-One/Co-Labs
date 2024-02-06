@@ -60,15 +60,6 @@ function App() {
             <Route path="/creationStructure" element={<CreationStructure />} />
             <Route path="/" element={<IsNotAuth />} />
             <Route
-              path="/home"
-              element={
-                <Protected>
-                  <Home />
-                </Protected>
-              }
-            />
-            <Route path="/userPrefs" element={<UserPrefs />} />
-            <Route
               path="/structures"
               element={
                 <Protected>
@@ -76,6 +67,8 @@ function App() {
                 </Protected>
               }
             />
+            <Route path="/userPrefs" element={<UserPrefs />} />
+
             <Route
               path="/structure/:id"
               element={
@@ -102,6 +95,14 @@ function App() {
             />
             <Route
               path="/profil"
+              element={
+                <Protected>
+                  <Profil />
+                </Protected>
+              }
+            />
+            <Route
+              path="/profil/:id"
               element={
                 <Protected>
                   <Profil />

@@ -4,9 +4,9 @@ const handleSignUp = async (forms) => {
   try {
     const { data } = await Api.post("signup", forms);
     if (data.status === "success") {
-      return data.data.user;
+      return data.data;
     } else {
-      console.log(data.status);
+      return data;
     }
   } catch (error) {
     console.log(error);
@@ -20,7 +20,7 @@ const handleSignIn = async (forms) => {
       console.log(data);
       return data.data;
     } else {
-      console.log(data.status);
+      return data;
     }
   } catch (error) {
     console.log(error);

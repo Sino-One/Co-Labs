@@ -63,10 +63,16 @@ export default function UserPrefs() {
         "Vous avez indiqué ne pas être disponible pour des projets, vous ne recevrez donc pas d'invitations aux projets, vous pourrez toujours modifier cela plus tard !"
       );
     }
-    await AuthService.CallSignUp(data).then((user) => {
-      setUser(user);
-      navigate("/home");
-      toast.success("Compte créé avec succès ! Bienvenue sur la plateforme !");
+    await AuthService.CallSignUp(data).then((data) => {
+      if (data.user) {
+        setUser(data.user);
+        navigate("/structures");
+        toast.success(
+          "Compte créé avec succès ! Bienvenue sur la plateforme !"
+        );
+      } else {
+        toast.error(data.message);
+      }
     });
   };
 
