@@ -113,14 +113,16 @@ export default function ProjetDetails() {
                     {invit.user.username}
                   </Typography>
                 </CardContent>
-                <CardActions>
-                  <Button
-                    size="small"
-                    onClick={() => handleAcceptMember(invit.user)}
-                  >
-                    Ajouter
-                  </Button>
-                </CardActions>
+                {user._id === projet.user._id ? (
+                  <CardActions>
+                    <Button
+                      size="small"
+                      onClick={() => handleAcceptMember(invit.user)}
+                    >
+                      Ajouter
+                    </Button>
+                  </CardActions>
+                ) : null}
               </Card>
             );
           })}

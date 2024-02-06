@@ -32,15 +32,17 @@ export default function Projects() {
       });
       structures.map((structure) => {
         structure.projets.map((projet) => {
-          const isInProject = projet.members.some(
-            (obj) => obj._id === user._id
-          );
-          if (isInProject) {
-            console.log(projet);
-            setMembersProjects((membersProjects) => [
-              ...membersProjects,
-              projet,
-            ]);
+          if (projet.members) {
+            const isInProject = projet.members.some(
+              (obj) => obj._id === user._id
+            );
+            if (isInProject) {
+              console.log(projet);
+              setMembersProjects((membersProjects) => [
+                ...membersProjects,
+                projet,
+              ]);
+            }
           }
         });
       });
@@ -93,7 +95,18 @@ export default function Projects() {
       >
         {membersProjects.map((projet, index) => (
           <Grid key={index} style={{ margin: "30px" }}>
-            <Card sx={{ maxWidth: 345 }}>
+            <Card
+              sx={{ maxWidth: 345 }}
+              onClick={() =>
+                navigate("/projetDetails", {
+                  state: {
+                    projet,
+                    user,
+                    projectStructure: userStructure,
+                  },
+                })
+              }
+            >
               <CardActionArea>
                 <CardContent>
                   <Typography gutterBottom variant="h5" component="div">

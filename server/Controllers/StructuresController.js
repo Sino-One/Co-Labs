@@ -107,6 +107,9 @@ module.exports.askJoinProject = async (req, res, next) => {
         const existsInWaiting = project.waitingMembers.some(
           (obj) => obj._id === user._id
         );
+        if (!project?.members) {
+          project.members = [];
+        }
         const existsInMembers = project.members.some(
           (obj) => obj._id === user._id
         );
