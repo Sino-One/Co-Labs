@@ -16,6 +16,7 @@ export default function Projects() {
   const { structures, setStructures } = useContext(StructuresContext);
   const [userProjects, setUserProjects] = useState([]);
   const [userStructure, setUserStructure] = useState({});
+  const [membersProjects, setMembersProjects] = useState([]);
 
   useEffect(() => {
     if (user && structures) {
@@ -29,10 +30,22 @@ export default function Projects() {
           setUserProjects((userProjects) => [...userProjects, projet]);
         }
       });
+      structures.map((structure) => {
+        structure.projets.map((projet) => {
+          const isInProject = projet.members.some(
+            (obj) => obj._id === user._id
+          );
+          if (isInProject) {
+            console.log(projet);
+            setMembersProjects((membersProjects) => [
+              ...membersProjects,
+              projet,
+            ]);
+          }
+        });
+      });
     }
   }, [user, structures]);
-
-  console.log(userProjects);
 
   return (
     <>
@@ -78,7 +91,7 @@ export default function Projects() {
         columnSpacing={{ sm: 2, md: 3 }}
         style={{ justifyContent: "center", margin: "0 -24px" }}
       >
-        {userProjects.map((projet, index) => (
+        {membersProjects.map((projet, index) => (
           <Grid key={index} style={{ margin: "30px" }}>
             <Card sx={{ maxWidth: 345 }}>
               <CardActionArea>
