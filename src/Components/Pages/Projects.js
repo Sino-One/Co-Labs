@@ -27,7 +27,10 @@ export default function Projects() {
       setUserStructure(userStructure);
       userStructure?.projets.map((projet) => {
         if (projet.user._id === user._id) {
-          setUserProjects((userProjects) => [...userProjects, projet]);
+          setUserProjects((userProjects) => [
+            ...userProjects,
+            { projet, structure: userStructure },
+          ]);
         }
       });
       structures.map((structure) => {
@@ -40,7 +43,7 @@ export default function Projects() {
               console.log(projet);
               setMembersProjects((membersProjects) => [
                 ...membersProjects,
-                projet,
+                { projet, structure },
               ]);
             }
           }
@@ -48,6 +51,9 @@ export default function Projects() {
       });
     }
   }, [user, structures]);
+
+  console.log(userProjects);
+  console.log(membersProjects);
 
   return (
     <>
@@ -58,7 +64,7 @@ export default function Projects() {
         columnSpacing={{ sm: 2, md: 3 }}
         style={{ justifyContent: "center", margin: "0 -24px" }}
       >
-        {userProjects.map((projet, index) => (
+        {userProjects.map(({ projet, structure }, index) => (
           <Grid key={index} style={{ margin: "30px" }}>
             <Card
               sx={{ maxWidth: 345 }}
@@ -67,7 +73,7 @@ export default function Projects() {
                   state: {
                     projet,
                     user,
-                    projectStructure: userStructure,
+                    projectStructure: structure,
                   },
                 })
               }
@@ -93,7 +99,7 @@ export default function Projects() {
         columnSpacing={{ sm: 2, md: 3 }}
         style={{ justifyContent: "center", margin: "0 -24px" }}
       >
-        {membersProjects.map((projet, index) => (
+        {membersProjects.map(({ projet, structure }, index) => (
           <Grid key={index} style={{ margin: "30px" }}>
             <Card
               sx={{ maxWidth: 345 }}
@@ -102,7 +108,7 @@ export default function Projects() {
                   state: {
                     projet,
                     user,
-                    projectStructure: userStructure,
+                    projectStructure: structure,
                   },
                 })
               }

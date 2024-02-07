@@ -12,14 +12,15 @@ import CardContent from "@mui/material/CardContent";
 
 export default function ProjetDetails() {
   const navigate = useNavigate();
+  const location = useLocation();
   const { user } = useContext(UserContext);
   const [waitingInvits, setWaitingInvits] = useState([]);
-  const location = useLocation();
-  let projet = location.state.projet;
-  let projectStructure = location.state.projectStructure;
+  const [projet, setProjet] = useState(location.state.projet);
+  const [projectStructure, setProjectStructure] = useState(
+    location.state.projectStructure
+  );
 
   console.log(projet);
-  console.log(user);
 
   const handleJoin = () => {
     Api.post("askJoinProject", {
@@ -27,9 +28,9 @@ export default function ProjetDetails() {
       projectName: projet.projectName,
       user: user,
     }).then((data) => {
+      setProjectStructure(data.data.structure);
+      setProjet(data.data.project);
       toast.success(data.data.message);
-      projectStructure = data.data.structure;
-      projet = data.data.project;
     });
   };
 
@@ -39,6 +40,8 @@ export default function ProjetDetails() {
       projectName: projet.projectName,
       user: user,
     }).then((data) => {
+      setProjectStructure(data.data.structure);
+      setProjet(data.data.project);
       toast.success(data.data.message);
     });
   };
@@ -56,7 +59,7 @@ export default function ProjetDetails() {
       });
     }
     setWaitingInvits(invits);
-  }, [projet]);
+  }, [projet, projectStructure]);
 
   return (
     <>

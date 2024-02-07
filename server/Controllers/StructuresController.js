@@ -126,6 +126,7 @@ module.exports.askJoinProject = async (req, res, next) => {
           message: "Demande envoyée",
           success: true,
           structure,
+          project,
         });
         next();
       } else {
