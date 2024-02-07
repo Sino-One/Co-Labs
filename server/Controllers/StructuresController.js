@@ -178,3 +178,36 @@ module.exports.acceptJoinProject = async (req, res, next) => {
     console.error(error);
   }
 };
+
+module.exports.deleteProject = async (req, res, next) => {
+  try {
+    const { idStructure, projectName } = req.body;
+
+    const structure = await Structure.findById(idStructure);
+
+    if (structure) {
+      const project = structure.projets.find(
+        (project) => project.projectName === projectName
+      );
+      if (project) {
+        structure.projets = structure.projets.filter(
+          (project) => project.projectName !== projectName
+        );
+        await Structure.updateOne({ _id: idStructure }, structure);
+        res.status(201).json({
+          message: "Projet supprimé",
+          success: true,
+          structure,
+        });
+        next();
+      } else {
+        res.status(404).json({
+          message: "Projet non trouvé",
+          success: false,
+        });
+      }
+    }
+  } catch (error) {
+    console.error(error);
+  }
+};

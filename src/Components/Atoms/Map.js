@@ -166,12 +166,15 @@ export default function Map() {
     <div>
       <div
         style={{
-          display: "flex",
-          flexWrap: "wrap",
-          margin: "24px 24px 0 24px",
+          display: "grid",
+          gridTemplateColumns: "repeat(auto-fit, minmax(250px, 1fr))",
         }}
       >
-        <ButtonGroup variant="outlined" aria-label="outlined button group">
+        <ButtonGroup
+          variant="outlined"
+          aria-label="outlined button group"
+          style={{ margin: "16px 24px 0 24px" }}
+        >
           <Button
             onClick={() => setFilter("structure")}
             style={{
@@ -191,9 +194,7 @@ export default function Map() {
             Projets
           </Button>
         </ButtonGroup>
-        <div
-          style={{ display: "block", width: "25%", margin: "24px 24px 0 24px" }}
-        >
+        <div style={{ margin: "16px 24px 0 24px" }}>
           <Typography variant="body1" component="div">
             Rayon de recherche (km)
           </Typography>
@@ -206,9 +207,10 @@ export default function Map() {
             min={0}
             max={110}
             onChange={(e, v) => setRadius(v)}
+            style={{ marginTop: "16px" }}
           />
         </div>
-        <div style={{ display: "block" }}>
+        <div style={{ display: "block", margin: "16px 24px 0 24px" }}>
           <Typography variant="body1" component="div">
             Secteur d'activité
           </Typography>
@@ -225,7 +227,7 @@ export default function Map() {
             <MenuItem value={"Mixte"}>Mixte</MenuItem>
           </Select>
         </div>
-        <div style={{ display: "block" }}>
+        <div style={{ display: "block", margin: "16px 24px 0 24px" }}>
           <Typography variant="body1" component="div">
             Public accueillis
           </Typography>

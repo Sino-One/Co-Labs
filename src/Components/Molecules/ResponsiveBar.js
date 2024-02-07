@@ -44,7 +44,7 @@ function ResponsiveAppBar() {
   const { structures } = useContext(StructuresContext);
 
   useEffect(() => {
-    if (user) {
+    if (user && structures) {
       const userStructure = structures.find(
         (structure) => structure._id === user.structure
       );

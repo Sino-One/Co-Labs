@@ -9,6 +9,10 @@ import Card from "@mui/material/Card";
 import CardContent from "@mui/material/CardContent";
 import Typography from "@mui/material/Typography";
 import { CardActionArea } from "@mui/material";
+import DeleteForeverRoundedIcon from "@mui/icons-material/DeleteForeverRounded";
+import IconButton from "@mui/material/IconButton";
+import { toast } from "react-toastify";
+import * as Api from "../../Utils/Api";
 
 export default function Projects() {
   const navigate = useNavigate();
@@ -18,21 +22,18 @@ export default function Projects() {
   const [userStructure, setUserStructure] = useState({});
   const [membersProjects, setMembersProjects] = useState([]);
 
+  const handleDelete = (id, projectName) => {
+    Api.post("deleteProject", {
+      idStructure: id,
+      projectName: projectName,
+    }).then((data) => {
+      setUserStructure(data.data.structure);
+      toast.success(data.data.message);
+    });
+  };
+
   useEffect(() => {
-    if (user && structures) {
-      setUserProjects([]);
-      const userStructure = structures.find(
-        (structure) => structure._id === user.structure
-      );
-      setUserStructure(userStructure);
-      userStructure?.projets.map((projet) => {
-        if (projet.user._id === user._id) {
-          setUserProjects((userProjects) => [
-            ...userProjects,
-            { projet, structure: userStructure },
-          ]);
-        }
-      });
+    if (structures) {
       structures.map((structure) => {
         structure.projets.map((projet) => {
           if (projet.members) {
@@ -40,7 +41,6 @@ export default function Projects() {
               (obj) => obj._id === user._id
             );
             if (isInProject) {
-              console.log(projet);
               setMembersProjects((membersProjects) => [
                 ...membersProjects,
                 { projet, structure },
@@ -50,10 +50,29 @@ export default function Projects() {
         });
       });
     }
+    if (user) {
+      const userStructureFirst = structures.find(
+        (s) => s._id === user.structure
+      );
+      setUserStructure(userStructureFirst);
+    }
   }, [user, structures]);
 
-  console.log(userProjects);
-  console.log(membersProjects);
+  useEffect(() => {
+    if (user && userStructure) {
+      setUserProjects([]);
+      if (userStructure.projets) {
+        userStructure.projets.map((projet) => {
+          if (projet.user._id === user._id) {
+            setUserProjects((userProjects) => [
+              ...userProjects,
+              { projet, structure: userStructure },
+            ]);
+          }
+        });
+      }
+    }
+  }, [userStructure]);
 
   return (
     <>
@@ -66,6 +85,14 @@ export default function Projects() {
       >
         {userProjects.map(({ projet, structure }, index) => (
           <Grid key={index} style={{ margin: "30px" }}>
+            <IconButton
+              aria-label="delete"
+              size="small"
+              onClick={() => handleDelete(structure._id, projet.projectName)}
+              style={{ float: "right" }}
+            >
+              <DeleteForeverRoundedIcon fontSize="inherit" />
+            </IconButton>
             <Card
               sx={{ maxWidth: 345 }}
               onClick={() =>
