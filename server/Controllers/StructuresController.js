@@ -1,4 +1,5 @@
 const Structure = require("../models/StructureModel");
+const User = require("../models/UserModel");
 
 module.exports.CreationStructure = async (req, res, next) => {
   try {
@@ -44,6 +45,7 @@ module.exports.getAllStructures = async (req, res, next) => {
     console.error(error);
   }
 };
+
 module.exports.addProject = async (req, res, next) => {
   try {
     const {
@@ -71,19 +73,106 @@ module.exports.addProject = async (req, res, next) => {
         structure.projets = [];
       }
       structure.projets.push(newProject);
+      const query = {};
+      Object.keys(tags).forEach((tag) => {
+        if (tags[tag]) {
+          query[`preferences.${tag}`] = true;
+        }
+      });
+
+      const interestedUsers = await User.find(query);
+
+      // Filtrer pour ne pas inclure l'utilisateur actuel
+      const filteredUsers = interestedUsers.filter(
+        (u) => u._id.toString() !== user._id.toString()
+      );
+
+      filteredUsers.forEach((u) => {
+        if (!u?.notificationsProject) {
+          u.notificationsProject = [];
+        }
+        u.notificationsProject.push({
+          projectName,
+          idStructure,
+        });
+      });
+
+      for (const user of filteredUsers) {
+        await User.updateOne({ _id: user._id }, { $set: user });
+      }
+
       await Structure.updateOne({ _id: idStructure }, structure);
       res.status(201).json({
         message: "Project created successfully",
         success: true,
         structure,
       });
-      console.log(structure);
       next();
     } else {
       res.status(404).json({
         message: "Structure not found",
         success: false,
       });
+    }
+  } catch (error) {
+    console.error(error);
+  }
+};
+
+module.exports.deleteProject = async (req, res, next) => {
+  try {
+    const { idStructure, projectName } = req.body;
+
+    const structure = await Structure.findById(idStructure);
+
+    if (structure) {
+      const project = structure.projets.find(
+        (project) => project.projectName === projectName
+      );
+      if (project) {
+        structure.projets = structure.projets.filter(
+          (project) => project.projectName !== projectName
+        );
+        await Structure.updateOne({ _id: idStructure }, structure);
+
+        const query = {};
+        Object.keys(project.tags).forEach((tag) => {
+          if (project.tags[tag]) {
+            query[`preferences.${tag}`] = true;
+          }
+        });
+
+        const interestedUsers = await User.find(query);
+
+        // Filtrer pour ne pas inclure l'utilisateur actuel
+
+        interestedUsers.forEach((u) => {
+          const filteredNotifs = u.notificationsProject.filter(
+            (notification) =>
+              !(
+                notification.projectName === projectName &&
+                notification.idStructure === idStructure
+              )
+          );
+          u.notificationsProject = filteredNotifs;
+        });
+
+        for (const user of interestedUsers) {
+          await User.updateOne({ _id: user._id }, { $set: user });
+        }
+
+        res.status(201).json({
+          message: "Projet supprimé",
+          success: true,
+          structure,
+        });
+        next();
+      } else {
+        res.status(404).json({
+          message: "Projet non trouvé",
+          success: false,
+        });
+      }
     }
   } catch (error) {
     console.error(error);
@@ -165,39 +254,6 @@ module.exports.acceptJoinProject = async (req, res, next) => {
           success: true,
           structure,
           project,
-        });
-        next();
-      } else {
-        res.status(404).json({
-          message: "Projet non trouvé",
-          success: false,
-        });
-      }
-    }
-  } catch (error) {
-    console.error(error);
-  }
-};
-
-module.exports.deleteProject = async (req, res, next) => {
-  try {
-    const { idStructure, projectName } = req.body;
-
-    const structure = await Structure.findById(idStructure);
-
-    if (structure) {
-      const project = structure.projets.find(
-        (project) => project.projectName === projectName
-      );
-      if (project) {
-        structure.projets = structure.projets.filter(
-          (project) => project.projectName !== projectName
-        );
-        await Structure.updateOne({ _id: idStructure }, structure);
-        res.status(201).json({
-          message: "Projet supprimé",
-          success: true,
-          structure,
         });
         next();
       } else {

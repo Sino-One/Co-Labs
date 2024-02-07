@@ -10,7 +10,6 @@ import { fromAddress } from "react-geocode";
 import Slider from "@mui/material/Slider";
 import MenuItem from "@mui/material/MenuItem";
 import Select from "@mui/material/Select";
-import Annuaire from "./AnnuaireStructure";
 import { StructuresContext } from "../../store/StructuresReducer";
 import { Typography } from "@mui/material";
 import ButtonGroup from "@mui/material/ButtonGroup";
@@ -20,6 +19,8 @@ import { UserContext } from "../../store/UserReducer";
 import AnnuaireStructure from "./AnnuaireStructure";
 import AnnuaireProjet from "./AnnuaireProjet";
 import StructureService from "../../Services/StructureService";
+import { Checkbox, FormControlLabel, FormGroup } from "@mui/material";
+import Grid from "@mui/material/Grid";
 
 const inputStyle = {
   boxSizing: `border-box`,
@@ -84,6 +85,15 @@ export default function Map() {
   const [secteurStructure, setSecteurStructure] = useState("Mixte");
   const [filter, setFilter] = useState("structure");
   const [publicAcc, setPublicAcc] = useState(publicAccType.enfant);
+  const [tags, setTags] = useState({
+    social: false,
+    culturel: false,
+    sportif: false,
+    nature: false,
+    mediation: false,
+    animation: false,
+    sante: false,
+  });
 
   useEffect(() => {
     async function fetchStructures() {
@@ -138,7 +148,8 @@ export default function Map() {
         filtered = filtered.filter((structure) => {
           if (
             structure.secteur === secteurStructure ||
-            secteurStructure === "Mixte"
+            secteurStructure === "Mixte" ||
+            structure.secteur === "Mixte"
           ) {
             return structure;
           }
@@ -148,11 +159,46 @@ export default function Map() {
             return structure;
           }
         });
+        filtered = filtered.filter((structure) => {
+          if (filter === "projet") {
+            // Vérifier si la structure contient au moins un projet qui correspond aux tags
+            const hasMatchingProjects = structure.projets.some((projet) => {
+              // Si aucun tag n'est sélectionné, retourner true
+              if (
+                !tags.social &&
+                !tags.culturel &&
+                !tags.sportif &&
+                !tags.nature &&
+                !tags.mediation &&
+                !tags.animation &&
+                !tags.sante
+              ) {
+                return true;
+              }
+              // Sinon, vérifier si au moins un tag correspond
+              return (
+                (tags.social && projet.tags.social) ||
+                (tags.culturel && projet.tags.culturel) ||
+                (tags.sportif && projet.tags.sportif) ||
+                (tags.nature && projet.tags.nature) ||
+                (tags.mediation && projet.tags.mediation) ||
+                (tags.animation && projet.tags.animation) ||
+                (tags.sante && projet.tags.sante)
+              );
+            });
+
+            // Retourner true si la structure a au moins un projet qui correspond aux tags
+            return hasMatchingProjects;
+          } else {
+            // Retourner toutes les structures si le filtre n'est pas "projet"
+            return true;
+          }
+        });
         setFilteredMarkers(filtered);
       }, 100);
     }
     fetchFilteredMarkers(markers);
-  }, [center, radius, markers, filter, secteurStructure, publicAcc]);
+  }, [center, radius, markers, filter, secteurStructure, publicAcc, tags]);
 
   if (loadError) {
     return <div>Error loading maps</div>;
@@ -247,6 +293,113 @@ export default function Map() {
           </Select>
         </div>
       </div>
+      {filter === "projet" && (
+        <div style={{ display: "flex", margin: "16px 24px 0 24px" }}>
+          <FormGroup
+            style={{
+              display: "flex",
+              marginTop: 16,
+            }}
+          >
+            <Typography variant="h6" component="div">
+              Tags
+            </Typography>
+            <Grid container spacing={1} justifyContent="center">
+              <Grid item>
+                <FormControlLabel
+                  control={
+                    <Checkbox
+                      checked={tags.social}
+                      onChange={(e) =>
+                        setTags({ ...tags, social: e.target.checked })
+                      }
+                    />
+                  }
+                  label="Projet social"
+                />
+              </Grid>
+              <Grid item>
+                <FormControlLabel
+                  control={
+                    <Checkbox
+                      checked={tags.culturel}
+                      onChange={(e) =>
+                        setTags({ ...tags, culturel: e.target.checked })
+                      }
+                    />
+                  }
+                  label="Projet culturel"
+                />
+              </Grid>
+              <Grid item>
+                <FormControlLabel
+                  control={
+                    <Checkbox
+                      checked={tags.sportif}
+                      onChange={(e) =>
+                        setTags({ ...tags, sportif: e.target.checked })
+                      }
+                    />
+                  }
+                  label="Projet sportif"
+                />
+              </Grid>
+              <Grid item>
+                <FormControlLabel
+                  control={
+                    <Checkbox
+                      checked={tags.nature}
+                      onChange={(e) =>
+                        setTags({ ...tags, nature: e.target.checked })
+                      }
+                    />
+                  }
+                  label="Projet nature"
+                />
+              </Grid>
+              <Grid item>
+                <FormControlLabel
+                  control={
+                    <Checkbox
+                      checked={tags.mediation}
+                      onChange={(e) =>
+                        setTags({ ...tags, mediation: e.target.checked })
+                      }
+                    />
+                  }
+                  label="Médiation"
+                />
+              </Grid>
+              <Grid item>
+                <FormControlLabel
+                  control={
+                    <Checkbox
+                      checked={tags.animation}
+                      onChange={(e) =>
+                        setTags({ ...tags, animation: e.target.checked })
+                      }
+                    />
+                  }
+                  label="Animation"
+                />
+              </Grid>
+              <Grid item>
+                <FormControlLabel
+                  control={
+                    <Checkbox
+                      checked={tags.sante}
+                      onChange={(e) =>
+                        setTags({ ...tags, sante: e.target.checked })
+                      }
+                    />
+                  }
+                  label="Santé"
+                />
+              </Grid>
+            </Grid>
+          </FormGroup>
+        </div>
+      )}
       <center>
         <GoogleMap
           mapContainerStyle={mapContainerStyle}

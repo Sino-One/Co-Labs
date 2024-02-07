@@ -43,6 +43,9 @@ const userSchema = new mongoose.Schema({
   availability: {
     type: Boolean,
   },
+  notificationsProject: {
+    type: Schema.Types.Mixed,
+  },
   createdAt: {
     type: Date,
     default: new Date(),
