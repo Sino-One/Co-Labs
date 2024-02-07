@@ -18,6 +18,7 @@ import { UserContext } from "../../store/UserReducer";
 import AuthService from "../../Services/AuthService";
 import { StructuresContext } from "../../store/StructuresReducer";
 import GroupAddRoundedIcon from "@mui/icons-material/GroupAddRounded";
+import NotificationsActiveRoundedIcon from "@mui/icons-material/NotificationsActiveRounded";
 
 const pages = [
   { name: "Structures", href: "/structures", current: false },
@@ -36,6 +37,7 @@ function ResponsiveAppBar() {
   const [anchorElNav, setAnchorElNav] = React.useState(null);
   const [anchorElUser, setAnchorElUser] = React.useState(null);
   const [anchorElInvitation, setAnchorElInvitation] = React.useState(null);
+  const [anchorElNotification, setAnchorElNotification] = React.useState(null);
   const [userStructure, setUserStructure] = useState({});
   const [userProjects, setUserProjects] = useState([{}]);
   const [waitingInvits, setWaitingInvits] = useState([]);
@@ -95,6 +97,10 @@ function ResponsiveAppBar() {
     setAnchorElInvitation(event.currentTarget);
   };
 
+  const handleOpenNotificationMenu = (event) => {
+    setAnchorElNotification(event.currentTarget);
+  };
+
   const handleCloseNavMenu = () => {
     setAnchorElNav(null);
   };
@@ -121,15 +127,38 @@ function ResponsiveAppBar() {
     if (route === "/SignIn" || route === "/SignUp" || route === "/profil")
       navigate(route);
   };
-  const handleCloseInvitationMenu = (route, user, projet) => {
+
+  const handleCloseInvitationMenu = (e, route, user, projet) => {
     setAnchorElInvitation(null);
-    navigate(route, {
-      state: {
-        projet,
-        user,
-        projectStructure: userStructure,
-      },
-    });
+
+    if (route !== "backdropClick") {
+      navigate(route, {
+        state: {
+          projet,
+          user,
+          projectStructure: userStructure,
+        },
+      });
+    }
+  };
+
+  const handleCloseNotificationMenu = (e, notif) => {
+    setAnchorElNotification(null);
+    if (structures && notif !== "backdropClick") {
+      const projectStructure = structures.find(
+        (structure) => structure._id === notif.idStructure
+      );
+      const projet = projectStructure.projets.find(
+        (p) => p.projectName === notif.projectName
+      );
+      navigate("/projetDetails", {
+        state: {
+          projet,
+          user,
+          projectStructure,
+        },
+      });
+    }
   };
 
   const redirect = (page) => {
@@ -142,8 +171,6 @@ function ResponsiveAppBar() {
       console.log(res);
       setUser(null);
     });
-    //   removeCookie("");
-    // navigate("/signIn");
   };
 
   return (
@@ -247,6 +274,63 @@ function ResponsiveAppBar() {
                 </div>
               ))}
             </Box>
+            {
+              // TODO Notifications Component
+              user && user.notificationsProject && (
+                <Box sx={{ flexGrow: 0, mr: "24px" }}>
+                  <Tooltip title="Notifications">
+                    <IconButton
+                      sx={{ p: 0 }}
+                      onClick={handleOpenNotificationMenu}
+                    >
+                      <NotificationsActiveRoundedIcon />
+                      <div
+                        style={{
+                          fontSize: "small",
+                          marginBottom: "24px",
+                          color: "chartreuse",
+                        }}
+                      >
+                        {user.notificationsProject.length}
+                      </div>
+                    </IconButton>
+                  </Tooltip>
+                  <Menu
+                    sx={{ mt: "45px" }}
+                    id="menu-appbar"
+                    anchorEl={anchorElNotification}
+                    anchorOrigin={{
+                      vertical: "top",
+                      horizontal: "right",
+                    }}
+                    keepMounted
+                    transformOrigin={{
+                      vertical: "top",
+                      horizontal: "right",
+                    }}
+                    open={Boolean(anchorElNotification)}
+                    onClose={handleCloseNotificationMenu}
+                  >
+                    {user.notificationsProject.map((notif, index) => {
+                      return (
+                        notif && (
+                          <MenuItem
+                            key={index}
+                            onClick={(e) =>
+                              handleCloseNotificationMenu(e, notif)
+                            }
+                          >
+                            <Typography textAlign="center">
+                              {notif.projectName}
+                            </Typography>
+                          </MenuItem>
+                        )
+                      );
+                    })}
+                  </Menu>
+                </Box>
+              )
+            }
 
             {
               // TODO Invitations Component
@@ -290,8 +374,9 @@ function ResponsiveAppBar() {
                         invit && (
                           <MenuItem
                             key={index}
-                            onClick={() =>
+                            onClick={(e) =>
                               handleCloseInvitationMenu(
+                                e,
                                 "/projetDetails",
                                 invit.user,
                                 invit.projet
