@@ -21,6 +21,7 @@ import AnnuaireProjet from "./AnnuaireProjet";
 import StructureService from "../../Services/StructureService";
 import { Checkbox, FormControlLabel, FormGroup } from "@mui/material";
 import Grid from "@mui/material/Grid";
+import { useNavigate } from "react-router-dom";
 
 const inputStyle = {
   boxSizing: `border-box`,
@@ -65,6 +66,7 @@ const toRadians = (degrees) => {
 const libraries = ["places"];
 
 export default function Map() {
+  const navigate = useNavigate();
   const mapContainerStyle = {
     width: "90vw",
     height: "50vh",
@@ -431,7 +433,12 @@ export default function Map() {
               position={{ lat: selectedCenter.lat, lng: selectedCenter.lng }}
             >
               <div>
-                <h2>{selectedCenter.nom}</h2>
+                <h2
+                  style={{ cursor: "pointer", color: "blue" }}
+                  onClick={() => navigate("/structure/" + selectedCenter._id)}
+                >
+                  {selectedCenter.nom}
+                </h2>
                 <p>{selectedCenter.adresse}</p>
               </div>
             </InfoWindow>
