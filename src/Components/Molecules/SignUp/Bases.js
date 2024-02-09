@@ -54,7 +54,6 @@ export default function Bases() {
       profession,
       structure,
     };
-    console.log(structure);
     navigate("/userPrefs", { state: { user } });
   }
 

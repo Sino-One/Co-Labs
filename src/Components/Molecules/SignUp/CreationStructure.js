@@ -69,7 +69,6 @@ export default function CreationStructure() {
         publicAcc,
       });
       const { success, message } = data;
-      console.log(success, data);
       if (success) {
         setTimeout(() => {
           navigate(-1);

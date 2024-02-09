@@ -15,9 +15,6 @@ const createSendToken = (user, statusCode, res) => {
   };
   if (process.env.NODE_ENV === "production") cookieOptions.secure = true; // set cookie only on https connection
 
-  console.log("token", token);
-  console.log("cookieOptions", cookieOptions);
-
   res.cookie("jwt", token, cookieOptions);
 
   // Remove password from output
@@ -78,17 +75,6 @@ module.exports.Signup = async (req, res, next) => {
     if (existingUser) {
       return res.json({ message: "L'utilisateur existe déjà" });
     }
-    console.log({
-      email,
-      password,
-      username,
-      profession,
-      structure,
-      preferences,
-      availability,
-      confirmPassword,
-      createdAt: new Date(),
-    });
     const newUser = await User.create({
       email,
       password,
@@ -225,7 +211,6 @@ module.exports.UpdateUser = CatchAsync(async (req, res, next) => {
         });
     }
     if (availability != undefined) {
-      console.log("availability", availability);
       User.updateOne({ _id: id }, { availability })
         .then((obj) => {
           res.status(200).json({ message: "Utilisateur modifié" });

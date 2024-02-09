@@ -20,8 +20,6 @@ export default function ProjetDetails() {
     location.state.projectStructure
   );
 
-  console.log(projet);
-
   const handleJoin = () => {
     Api.post("askJoinProject", {
       idStructure: projectStructure._id,

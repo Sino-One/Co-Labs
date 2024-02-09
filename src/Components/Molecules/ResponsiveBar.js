@@ -33,7 +33,7 @@ function isCurrent(location, path) {
   return location.pathname === path;
 }
 
-function ResponsiveAppBar() {
+function ResponsiveAppBar({ navigation }) {
   const [anchorElNav, setAnchorElNav] = React.useState(null);
   const [anchorElUser, setAnchorElUser] = React.useState(null);
   const [anchorElInvitation, setAnchorElInvitation] = React.useState(null);
@@ -80,9 +80,7 @@ function ResponsiveAppBar() {
     }
   }, [userProjects]);
 
-  useEffect(() => {
-    console.log("waitingInvits", waitingInvits);
-  }, [waitingInvits]);
+  useEffect(() => {}, [waitingInvits]);
 
   const location = useLocation();
   const navigate = useNavigate();
@@ -132,7 +130,7 @@ function ResponsiveAppBar() {
     setAnchorElInvitation(null);
 
     if (route !== "backdropClick") {
-      navigate(route, {
+      navigation.push({
         state: {
           projet,
           user,
@@ -168,7 +166,6 @@ function ResponsiveAppBar() {
 
   const logOut = async () => {
     await AuthService.CallLogOut().then((res) => {
-      console.log(res);
       setUser(null);
     });
   };
